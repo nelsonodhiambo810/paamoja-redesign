@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>PaaMoja Initiative</title>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3063/3063822.png" type="image/png">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* PaaMoja Brand Identity & Premium Typography */
+        :root {
+            --primary-maroon: #5D1818;
+            --accent-orange: #E88D14;
+            --light-bg: #f8f9fa;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+        }
+
+        .navbar-custom {
+            background-color: var(--primary-maroon);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+        }
+        
+        .btn-donate {
+            background-color: var(--accent-orange);
+            color: white;
+            border-radius: 30px; 
+            padding: 10px 28px;
+            font-weight: 700;
+            transition: all 0.3s ease; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-donate:hover {
+            background-color: white;
+            color: var(--accent-orange);
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 15px rgba(232, 141, 20, 0.4);
+        }
+
+        .section-title {
+            border-bottom: 4px solid var(--accent-orange);
+            display: inline-block;
+            padding-bottom: 8px;
+            margin-bottom: 40px;
+            color: var(--primary-maroon);
+            font-weight: 700;
+        }
+
+        /* Premium Card Hover Effect */
+        .premium-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+            border: none !important;
+        }
+
+        .premium-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+        }
+
+        .news-date {
+            color: var(--accent-orange);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Partner Logos Hover */
+        .partner-logo {
+            transition: color 0.3s ease, transform 0.3s ease;
+            cursor: pointer;
+        }
+        .partner-logo:hover {
+            color: var(--primary-maroon) !important;
+            transform: scale(1.05);
+        }
+
+        /* Footer Link Hover */
+        .footer-link {
+            transition: color 0.3s ease, padding-left 0.3s ease;
+        }
+        .footer-link:hover {
+            color: var(--accent-orange) !important;
+            padding-left: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">PaaMoja Initiative</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link text-white" href="#news">Latest News</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="#programs">Programs</a></li>
+                    <li class="nav-item ms-3">
+                        <button type="button" class="btn btn-donate" data-bs-toggle="modal" data-bs-target="#donationModal">
+                            DONATE NOW
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="text-white text-center py-5" style="background: linear-gradient(rgba(93, 24, 24, 0.8), rgba(93, 24, 24, 0.8)), url('https://source.unsplash.com/random/1920x1080/?nairobi'); background-size: cover; min-height: 60vh; display: flex; align-items: center;">
+        <div class="container">
+            <h1 class="display-3 fw-bold">Follow. Learn. Lead.</h1>
+            <p class="lead mb-4 fs-4">Empowering the youth of Mathare Valley to design their own future.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#programs" class="btn btn-outline-light btn-lg fw-bold">View Programs</a>
+                <a href="#" class="btn btn-warning btn-lg fw-bold">Partner With Us</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-4 bg-white border-bottom shadow-sm">
+        <div class="container text-center">
+            <p class="text-muted small fw-bold text-uppercase mb-3" style="letter-spacing: 2px;">Supported By Our Amazing Partners</p>
+            <div class="d-flex justify-content-center align-items-center flex-wrap gap-5 opacity-75">
+                <h4 class="text-secondary fw-bold mb-0 partner-logo">MOVE92</h4>
+                <h4 class="text-secondary fw-bold mb-0 partner-logo">JUMP!</h4>
+                <h4 class="text-secondary fw-bold mb-0 partner-logo">DIAR AWARDS</h4>
+                <h4 class="text-secondary fw-bold mb-0 partner-logo">MATHARE HUB</h4>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 text-white" style="background-color: var(--primary-maroon);">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-4 mb-3">
+                    <h2 class="display-4 fw-bold counter" data-target="500000">0</h2>
+                    <p class="fs-5 text-warning">Residents Reached</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h2 class="display-4 fw-bold counter" data-target="15">0</h2>
+                    <p class="fs-5 text-warning">Years of Service</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h2 class="display-4 fw-bold counter" data-target="6">0</h2>
+                    <p class="fs-5 text-warning">Core Programs</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-4 mb-5" id="news">
+                <h3 class="section-title">Latest Updates</h3>
+                <div class="list-group list-group-flush border-0">
+                    {% for item in news %}
+                    <a href="{{ item.link }}" class="list-group-item list-group-item-action p-4 premium-card mb-3 shadow-sm">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1 text-dark fw-bold">{{ item.title }}</h5>
+                        </div>
+                        <p class="news-date mb-1">{{ item.date }}</p>
+                        <small class="text-muted fw-bold">Read more &rarr;</small>
+                    </a>
+                    {% empty %}
+                    <div class="p-4 text-center text-muted premium-card shadow-sm">No news updates yet.</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-lg-8" id="programs">
+                <h3 class="section-title">Our Impact Programs</h3>
+                <div class="row">
+                    {% for program in programs %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm premium-card">
+                            {% if program.image %}
+                                <img src="{{ program.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ program.title }}">
+                            {% else %}
+                                <div class="bg-secondary text-white text-center d-flex align-items-center justify-content-center" style="height: 200px;">
+                                    <span class="fw-bold">PaaMoja Program</span>
+                                </div>
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold" style="color: var(--primary-maroon);">{{ program.title }}</h5>
+                                <p class="card-text text-secondary">{{ program.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="py-5 bg-white border-top">
+        <div class="container text-center">
+            <h2 class="mb-5 section-title">Voices of Mathare</h2>
+            
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    {% for story in stories %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="d-flex flex-column align-items-center">
+                            {% if story.photo %}
+                            <img src="{{ story.photo.url }}" class="rounded-circle mb-3 shadow" style="width: 120px; height: 120px; border: 4px solid var(--accent-orange); object-fit: cover;">
+                            {% endif %}
+                            <figure class="text-center" style="max-width: 700px;">
+                                <blockquote class="blockquote">
+                                    <p class="fs-4 fst-italic text-dark">"{{ story.quote }}"</p>
+                                </blockquote>
+                                <figcaption class="blockquote-footer mt-3 fs-6">
+                                    <strong class="text-dark">{{ story.name }}</strong> | <cite title="Source Title" style="color: var(--primary-maroon);">{{ story.role }}</cite>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">No stories yet.</p>
+                    {% endfor %}
+                </div>
+                
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true" style="padding: 20px;"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true" style="padding: 20px;"></span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-white pt-5 pb-4" style="background-color: #1a1a1a;">
+        <div class="container text-center text-md-start">
+            <div class="row text-center text-md-start">
+                
+                <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold" style="color: var(--accent-orange);">PaaMoja Initiative</h5>
+                    <p class="text-secondary" style="font-size: 0.95rem;">
+                        Empowering the youth of Mathare Valley through sexuality, leadership, and life skills education. We believe every individual can be a leader.
+                    </p>
+                    <p class="text-light fst-italic mt-3">Follow. Learn. Lead.</p>
+                </div>
+
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold" style="color: var(--accent-orange);">Quick Links</h5>
+                    <p><a href="#programs" class="text-secondary text-decoration-none footer-link">Our Programs</a></p>
+                    <p><a href="#news" class="text-secondary text-decoration-none footer-link">Latest News</a></p>
+                    <p><a href="#" class="text-secondary text-decoration-none footer-link" data-bs-toggle="modal" data-bs-target="#donationModal">Donate Now</a></p>
+                </div>
+
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold" style="color: var(--accent-orange);">Contact Us</h5>
+                    <p class="text-secondary"><strong class="text-light">Add:</strong> Mathare Valley, Nairobi</p>
+                    <p class="text-secondary"><strong class="text-light">Email:</strong> info@paamoja.org</p>
+                    <p class="text-secondary"><strong class="text-light">Phone:</strong> +254 712 244 204</p>
+                </div>
+            </div>
+
+            <hr class="mb-4 mt-4" style="border-color: #444;">
+            
+            <div class="row align-items-center">
+                <div class="col-md-7 col-lg-8">
+                    <p class="text-secondary mb-0">© 2026 Copyright: <strong class="text-white">PaaMoja Initiative</strong>. Built with Django.</p>
+                </div>
+                <div class="col-md-5 col-lg-4">
+                    <div class="text-center text-md-end">
+                        <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle me-2 fw-bold" style="width: 35px; height: 35px;">f</a>
+                        <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle me-2 fw-bold" style="width: 35px; height: 35px;">X</a>
+                        <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle fw-bold" style="width: 35px; height: 35px;">in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <div class="modal fade" id="donationModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+          <div class="modal-header border-0 pb-0">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center pt-0 px-5 pb-5">
+            <h3 class="fw-bold mb-4" style="color: var(--primary-maroon);">Support Mathare Valley</h3>
+            <p class="text-muted mb-4">Choose an amount to empower a youth today.</p>
+            <div class="d-grid gap-3 mb-4">
+                <button class="btn btn-outline-dark btn-lg fw-bold rounded-pill premium-card" onclick="selectAmount(1000)">KES 1,000</button>
+                <button class="btn btn-outline-dark btn-lg fw-bold rounded-pill premium-card" onclick="selectAmount(2500)">KES 2,500</button>
+                <button class="btn btn-outline-dark btn-lg fw-bold rounded-pill premium-card" onclick="selectAmount(5000)">KES 5,000</button>
+            </div>
+            <div class="mt-4 pt-4 border-top">
+                <label class="form-label fw-bold text-dark">Enter M-Pesa Number</label>
+                <input type="text" class="form-control form-control-lg text-center mb-3 rounded-pill bg-light" placeholder="07XX XXX XXX">
+                <button class="btn btn-success w-100 fw-bold btn-lg rounded-pill shadow-sm" style="background-color: #25D366; border: none;">PROCEED TO PAY</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+        function selectAmount(amount) {
+            alert("You selected KES " + amount + ". In a real app, this would trigger the M-Pesa STK Push!");
+        }
+
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200; 
+
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const inc = target / speed;
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + inc);
+                        setTimeout(updateCount, 20);
+                    } else {
+                        counter.innerText = target + "+"; 
+                    }
+                };
+                updateCount();
+            });
+        };
+
+        let hasAnimated = false;
+        window.addEventListener('scroll', () => {
+            const section = document.querySelector('.counter');
+            if (section) {
+                const position = section.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+
+                if (position < screenPosition && !hasAnimated) {
+                    animateCounters();
+                    hasAnimated = true; 
+                }
+            }
+        });
+    </script>
+</body>
+</html>
