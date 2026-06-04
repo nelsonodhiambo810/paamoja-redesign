@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="{% block html_lang %}en{% endblock %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {# ── PRIMARY SEO ───────────────────────────────────────────────────────── #}
+    <title>{% block title %}PaaMoja Initiative — Follow. Learn. Lead.{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}PaaMoja Initiative empowers youth in Mathare Valley, Nairobi through leadership, life skills, and sexuality education. 15+ years of community impact.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}PaaMoja, Mathare Valley, youth empowerment, Nairobi NGO, Kenya nonprofit, DIYEP, community development{% endblock %}">
+    <meta name="author" content="PaaMoja Initiative">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{% block canonical_url %}https://paamoja.org{{ request.path }}{% endblock %}">
+
+    {# ── OPEN GRAPH (WhatsApp, Facebook) ───────────────────────────────────── #}
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}PaaMoja Initiative — Follow. Learn. Lead.{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Empowering the youth of Mathare Valley to design their own future. 500,000+ residents reached, 15+ years of service.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}https://paamoja.org/static/img/og-default.jpg{% endblock %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://paamoja.org{{ request.path }}">
+    <meta property="og:site_name" content="PaaMoja Initiative">
+    <meta property="og:locale" content="en_KE">
+
+    {# ── TWITTER / X CARD ─────────────────────────────────────────────────── #}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}PaaMoja Initiative{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Empowering youth in Mathare Valley, Nairobi. Follow. Learn. Lead.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}https://paamoja.org/static/img/og-default.jpg{% endblock %}">
+    <meta name="twitter:site" content="@PaaMojaKenya">
+
+    {# ── STRUCTURED DATA (Google Rich Results) ─────────────────────────────── #}
+    {% block structured_data %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "NGO",
+        "name": "PaaMoja Initiative",
+        "url": "https://paamoja.org",
+        "logo": "https://paamoja.org/static/img/logo.png",
+        "description": "Youth empowerment organization serving Mathare Valley, Nairobi since 2009.",
+        "foundingDate": "2009",
+        "areaServed": {
+            "@type": "Place",
+            "name": "Mathare Valley, Nairobi, Kenya"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+254793794885",
+            "email": "info@paamoja.org",
+            "contactType": "Customer Support"
+        },
+        "sameAs": [
+            "https://facebook.com/paamoja",
+            "https://twitter.com/PaaMojaKenya"
+        ]
+    }
+    </script>
+    {% endblock %}
+
+    {# ── FAVICON ───────────────────────────────────────────────────────────── #}
+    <link rel="icon" href="{% block favicon %}https://cdn-icons-png.flaticon.com/512/3063/3063822.png{% endblock %}" type="image/png">
+
+    {# ── FONTS ─────────────────────────────────────────────────────────────── #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+    {# ── CSS ───────────────────────────────────────────────────────────────── #}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    {% load static %}
+
+    <style>
+        :root {
+            --primary-maroon: #5D1818;
+            --accent-orange: #E88D14;
+            --light-bg: #f8f9fa;
+            --dark-bg: #1a1a1a;
+            --maroon-dark: #3d1010;
+            --maroon-light: #8B2323;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+        }
+
+        h1, h2, .display-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* ── Navbar ── */
+        .navbar-custom {
+            background-color: var(--primary-maroon);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .navbar-custom .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        .navbar-custom .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-orange);
+            transition: width 0.3s ease;
+        }
+        .navbar-custom .nav-link:hover::after,
+        .navbar-custom .nav-link.active::after { width: 100%; }
+
+        /* ── Donate Button ── */
+        .btn-donate {
+            background-color: var(--accent-orange);
+            color: white;
+            border-radius: 30px;
+            padding: 10px 28px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+        }
+        .btn-donate:hover {
+            background-color: white;
+            color: var(--accent-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(232, 141, 20, 0.4);
+        }
+
+        /* ── Section Title ── */
+        .section-title {
+            border-bottom: 4px solid var(--accent-orange);
+            display: inline-block;
+            padding-bottom: 8px;
+            margin-bottom: 40px;
+            color: var(--primary-maroon);
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* ── Cards ── */
+        .premium-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+            border: none !important;
+        }
+        .premium-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12) !important;
+        }
+
+        .news-date {
+            color: var(--accent-orange);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .partner-logo {
+            transition: color 0.3s ease, transform 0.3s ease;
+            cursor: pointer;
+        }
+        .partner-logo:hover {
+            color: var(--primary-maroon) !important;
+            transform: scale(1.05);
+        }
+
+        /* ── Footer ── */
+        .footer-link { transition: color 0.3s ease, padding-left 0.3s ease; }
+        .footer-link:hover {
+            color: var(--accent-orange) !important;
+            padding-left: 5px;
+        }
+
+        /* ── Flash Messages ── */
+        .alert-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+        }
+
+        /* ── Page fade-in ── */
+        .page-content {
+            animation: fadeInUp 0.5s ease both;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        {% block extra_css_vars %}{% endblock %}
+    </style>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+    {# ── NAVBAR ─────────────────────────────────────────────────────────────── #}
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'website:home' %}">
+                <span style="color: var(--accent-orange);">Paa</span>Moja Initiative
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center gap-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-white {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'website:home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'website:about' %}">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'website:home' %}#programs">Programs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'website:home' %}#news">News</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'website:contact' %}">Contact</a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <button type="button" class="btn btn-donate" data-bs-toggle="modal" data-bs-target="#donationModal">
+                            <i class="fas fa-heart me-1"></i> DONATE
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {# ── FLASH MESSAGES ─────────────────────────────────────────────────────── #}
+    {% if messages %}
+    <div class="alert-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {# ── PAGE CONTENT ───────────────────────────────────────────────────────── #}
+    <main class="page-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    {# ── FOOTER ─────────────────────────────────────────────────────────────── #}
+    <footer class="text-white pt-5 pb-4" style="background-color: var(--dark-bg);">
+        <div class="container">
+            <div class="row text-center text-md-start">
+                <div class="col-md-4 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold" style="color: var(--accent-orange);">
+                        <span style="color: var(--accent-orange);">Paa</span>Moja Initiative
+                    </h5>
+                    <p class="text-secondary" style="font-size: 0.95rem;">
+                        Empowering the youth of Mathare Valley through leadership, sexuality education, and life skills. Every individual can be a leader.
+                    </p>
+                    <p class="text-light fst-italic mt-3">Follow. Learn. Lead.</p>
+                    <div class="mt-3 d-flex gap-2">
+                        <a href="#" class="btn btn-sm rounded-circle text-white" style="background:#1877F2;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm rounded-circle text-white" style="background:#000;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">
+                            <i class="fab fa-x-twitter"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm rounded-circle text-white" style="background:#0A66C2;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm rounded-circle text-white" style="background:#25D366;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-2 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold" style="color: var(--accent-orange);">Quick Links</h5>
+                    <p><a href="{% url 'website:home' %}" class="text-secondary text-decoration-none footer-link">Home</a></p>
+                    <p><a href="{% url 'website:about' %}" class="text-secondary text-decoration-none footer-link">About Us</a></p>
+                    <p><a href="{% url 'website:home' %}#programs" class="text-secondary text-decoration-none footer-link">Our Programs</a></p>
+                    <p><a href="{% url 'website:home' %}#news" class="text-secondary text-decoration-none footer-link">Latest News</a></p>
+                    <p><a href="{% url 'website:contact' %}" class="text-secondary text-decoration-none footer-link">Contact Us</a></p>
+                    <p>
+                        <a href="#" class="text-secondary text-decoration-none footer-link"
+                           data-bs-toggle="modal" data-bs-target="#donationModal">
+                            Donate Now
+                        </a>
+                    </p>
+                </div>
+
+                <div class="col-md-4 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold" style="color: var(--accent-orange);">Contact Us</h5>
+                    <p class="text-secondary">
+                        <i class="fas fa-map-marker-alt me-2" style="color:var(--accent-orange);"></i>
+                        Mathare Valley, Nairobi, Kenya
+                    </p>
+                    <p class="text-secondary">
+                        <i class="fas fa-envelope me-2" style="color:var(--accent-orange);"></i>
+                        info@paamoja.org
+                    </p>
+                    <p class="text-secondary">
+                        <i class="fas fa-phone me-2" style="color:var(--accent-orange);"></i>
+                        +254 793 794 885
+                    </p>
+                    <div class="mt-3 p-3 rounded" style="background:rgba(232,141,20,0.1); border-left: 3px solid var(--accent-orange);">
+                        <small class="text-secondary">
+                            <i class="fas fa-clock me-1" style="color:var(--accent-orange);"></i>
+                            Mon–Fri: 8:00 AM – 5:00 PM EAT
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="mb-4 mt-4" style="border-color: #333;">
+            <div class="row align-items-center">
+                <div class="col-md-7">
+                    <p class="text-secondary mb-0" style="font-size:0.85rem;">
+                        © {% now "Y" %} <strong class="text-white">PaaMoja Initiative</strong>. All rights reserved.
+                        Registered NGO, Kenya.
+                    </p>
+                </div>
+                <div class="col-md-5 text-center text-md-end">
+                    <small class="text-secondary">
+                        Built with <i class="fas fa-heart" style="color:var(--accent-orange);"></i> in Nairobi
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    {# ── DONATION MODAL (global — available on every page) ─────────────────── #}
+    {% include "website/partials/_donation_modal.html" %}
+
+    {# ── JS ─────────────────────────────────────────────────────────────────── #}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // ── Auto-dismiss flash messages ──────────────────────────────────────
+        setTimeout(() => {
+            document.querySelectorAll('.alert').forEach(el => {
+                const bsAlert = bootstrap.Alert.getOrCreateInstance(el);
+                bsAlert.close();
+            });
+        }, 5000);
+
+        // ── CSRF helper ──────────────────────────────────────────────────────
+        function getCookie(name) {
+            for (const cookie of document.cookie.split(';')) {
+                const c = cookie.trim();
+                if (c.startsWith(name + '=')) return decodeURIComponent(c.slice(name.length + 1));
+            }
+            return null;
+        }
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

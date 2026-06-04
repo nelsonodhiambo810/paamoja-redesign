@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: paamoja-web
+    runtime: python
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate"
+    startCommand: "gunicorn core.wsgi:application --workers 3 --timeout 120"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: core.settings.prod
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: paamoja-db
+          property: connectionString
+      - key: ALLOWED_HOSTS
+        value: paamoja-web.onrender.com
+      - key: MPESA_ENVIRONMENT
+        value: sandbox   # change to 'production' when going live
+      - key: MPESA_CONSUMER_KEY
+        sync: false
+      - key: MPESA_CONSUMER_SECRET
+        sync: false
+      - key: MPESA_SHORTCODE
+        sync: false
+      - key: MPESA_PASSKEY
+        sync: false
+      - key: MPESA_CALLBACK_URL
+        value: https://paamoja-web.onrender.com/mpesa/callback/
+
+databases:
+  - name: paamoja-db
+    databaseName: paamoja
+    user: paamoja

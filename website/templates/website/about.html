@@ -1,0 +1,424 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}About Us — PaaMoja Initiative | 15+ Years in Mathare Valley{% endblock %}
+{% block meta_description %}Learn about PaaMoja Initiative's 15-year mission empowering youth in Mathare Valley, Nairobi. Meet our team, our story, and the milestones that define us.{% endblock %}
+{% block og_title %}About PaaMoja Initiative{% endblock %}
+{% block og_description %}15+ years transforming lives in Mathare Valley. Meet the team behind Kenya's most dedicated youth empowerment NGO.{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ── About Page Specific ─────────────────────────────────────────────── */
+    .about-hero {
+        background: linear-gradient(160deg, #1a0808 0%, #5D1818 50%, #8B2323 100%);
+        min-height: 45vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .about-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 40px,
+            rgba(232,141,20,0.03) 40px,
+            rgba(232,141,20,0.03) 80px
+        );
+    }
+    .about-hero .container { position: relative; z-index: 1; }
+
+    /* Mission / Vision cards */
+    .value-card {
+        border-left: 4px solid var(--accent-orange);
+        background: white;
+        border-radius: 0 12px 12px 0;
+        padding: 24px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        height: 100%;
+    }
+    .value-card:hover {
+        transform: translateX(6px);
+        box-shadow: 0 8px 24px rgba(93,24,24,0.1);
+    }
+    .value-card .icon {
+        width: 48px; height: 48px;
+        background: linear-gradient(135deg, var(--primary-maroon), var(--accent-orange));
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        margin-bottom: 16px;
+        color: white; font-size: 1.2rem;
+    }
+
+    /* Timeline */
+    .timeline { position: relative; padding: 0; }
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 0; bottom: 0;
+        width: 3px;
+        background: linear-gradient(to bottom, var(--primary-maroon), var(--accent-orange));
+        transform: translateX(-50%);
+    }
+    .timeline-item {
+        display: flex;
+        justify-content: flex-end;
+        padding-right: calc(50% + 30px);
+        margin-bottom: 40px;
+        position: relative;
+    }
+    .timeline-item:nth-child(even) {
+        justify-content: flex-start;
+        padding-right: 0;
+        padding-left: calc(50% + 30px);
+    }
+    .timeline-dot {
+        position: absolute;
+        left: 50%;
+        top: 20px;
+        transform: translateX(-50%);
+        width: 16px; height: 16px;
+        background: var(--accent-orange);
+        border: 3px solid white;
+        border-radius: 50%;
+        box-shadow: 0 0 0 3px var(--primary-maroon);
+        z-index: 1;
+    }
+    .timeline-content {
+        background: white;
+        border-radius: 12px;
+        padding: 20px 24px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        max-width: 380px;
+        border-top: 3px solid var(--accent-orange);
+        transition: transform 0.3s;
+    }
+    .timeline-content:hover { transform: scale(1.02); }
+    .timeline-year {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.4rem;
+        color: var(--primary-maroon);
+        font-weight: 800;
+    }
+
+    /* Team cards */
+    .team-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        transition: transform 0.3s, box-shadow 0.3s;
+        height: 100%;
+    }
+    .team-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 16px 40px rgba(93,24,24,0.12);
+    }
+    .team-card .photo-wrap {
+        height: 220px;
+        overflow: hidden;
+        position: relative;
+    }
+    .team-card .photo-wrap img {
+        width: 100%; height: 100%; object-fit: cover;
+        transition: transform 0.4s;
+    }
+    .team-card:hover .photo-wrap img { transform: scale(1.05); }
+    .team-card .photo-placeholder {
+        height: 220px;
+        background: linear-gradient(135deg, var(--primary-maroon), #8B2323);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 3rem; color: var(--accent-orange);
+        font-family: 'Playfair Display', serif; font-weight: 800;
+    }
+    .team-card .card-body { padding: 20px; }
+    .team-card .role-badge {
+        display: inline-block;
+        background: rgba(93,24,24,0.08);
+        color: var(--primary-maroon);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        margin-bottom: 10px;
+    }
+
+    /* Stats band */
+    .stat-item {
+        text-align: center;
+        padding: 24px;
+        border-right: 1px solid rgba(255,255,255,0.1);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+        font-size: 2.5rem;
+        font-family: 'Playfair Display', serif;
+        font-weight: 800;
+        color: var(--accent-orange);
+    }
+
+    /* Mobile timeline */
+    @media (max-width: 768px) {
+        .timeline::before { left: 16px; }
+        .timeline-item,
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-left: 48px;
+            padding-right: 0;
+        }
+        .timeline-dot { left: 16px; }
+        .timeline-content { max-width: 100%; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ── HERO ─────────────────────────────────────────────────────────────────── #}
+<section class="about-hero text-white text-center py-5">
+    <div class="container">
+        <p class="text-warning small fw-bold text-uppercase mb-2" style="letter-spacing:3px;">
+            Our Story
+        </p>
+        <h1 class="display-3 fw-bold mb-3" style="font-family:'Playfair Display',serif;">
+            Born in Mathare.<br>Built for Mathare.
+        </h1>
+        <p class="lead opacity-75 mx-auto" style="max-width:580px;">
+            For over 15 years, PaaMoja Initiative has been the engine of youth leadership, hope, and dignity in one of Nairobi's most vibrant communities.
+        </p>
+    </div>
+</section>
+
+{# ── QUICK STATS ──────────────────────────────────────────────────────────── #}
+<section style="background: var(--primary-maroon);" class="text-white">
+    <div class="container">
+        <div class="row g-0">
+            <div class="col-6 col-md-3 stat-item">
+                <div class="stat-number">500K+</div>
+                <div class="small text-white-50 text-uppercase fw-bold" style="letter-spacing:1px;">Lives Reached</div>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <div class="stat-number">15+</div>
+                <div class="small text-white-50 text-uppercase fw-bold" style="letter-spacing:1px;">Years of Service</div>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <div class="stat-number">6</div>
+                <div class="small text-white-50 text-uppercase fw-bold" style="letter-spacing:1px;">Core Programs</div>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <div class="stat-number">4</div>
+                <div class="small text-white-50 text-uppercase fw-bold" style="letter-spacing:1px;">Partner Orgs</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ── MISSION / VISION / VALUES ────────────────────────────────────────────── #}
+<section class="py-5" style="background: var(--light-bg);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">What Drives Us</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="value-card">
+                    <div class="icon"><i class="fas fa-bullseye"></i></div>
+                    <h5 class="fw-bold mb-2" style="color:var(--primary-maroon); font-family:'Playfair Display',serif;">
+                        Our Mission
+                    </h5>
+                    <p class="text-secondary mb-0">
+                        To empower young people in Mathare Valley with knowledge, skills, and confidence — enabling them to become agents of change in their families and communities.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="value-card">
+                    <div class="icon"><i class="fas fa-eye"></i></div>
+                    <h5 class="fw-bold mb-2" style="color:var(--primary-maroon); font-family:'Playfair Display',serif;">
+                        Our Vision
+                    </h5>
+                    <p class="text-secondary mb-0">
+                        A Mathare Valley where every young person regardless of background has access to quality life skills education, dignified livelihoods, and a platform to lead.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="value-card">
+                    <div class="icon"><i class="fas fa-heart"></i></div>
+                    <h5 class="fw-bold mb-2" style="color:var(--primary-maroon); font-family:'Playfair Display',serif;">
+                        Our Values
+                    </h5>
+                    <ul class="text-secondary mb-0 ps-3">
+                        <li>Community First</li>
+                        <li>Radical Inclusion</li>
+                        <li>Integrity in Service</li>
+                        <li>Youth-Led Change</li>
+                        <li>Dignity & Respect</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ── TIMELINE ─────────────────────────────────────────────────────────────── #}
+{% if milestones %}
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Our Journey</h2>
+            <p class="text-muted">Key milestones that shaped who we are today</p>
+        </div>
+        <div class="timeline">
+            {% for milestone in milestones %}
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">{{ milestone.year }}</div>
+                    <h6 class="fw-bold text-dark mb-1">{{ milestone.title }}</h6>
+                    <p class="text-secondary small mb-0">{{ milestone.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% else %}
+{# ── Static timeline when no DB milestones yet ── #}
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Our Journey</h2>
+        </div>
+        <div class="timeline">
+            {% for item in default_milestones %}
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">{{ item.year }}</div>
+                    <h6 class="fw-bold text-dark mb-1">{{ item.title }}</h6>
+                    <p class="text-secondary small mb-0">{{ item.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <p class="text-center text-muted small mt-4">
+            <i class="fas fa-info-circle me-1"></i>
+            Add real milestones in the <a href="/admin/website/milestone/" style="color:var(--primary-maroon);">CMS</a>.
+        </p>
+    </div>
+</section>
+{% endif %}
+
+{# ── TEAM ─────────────────────────────────────────────────────────────────── #}
+<section class="py-5" style="background: var(--light-bg);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Meet the Team</h2>
+            <p class="text-muted">The people who show up every day for Mathare's youth</p>
+        </div>
+
+        {% if team %}
+        <div class="row g-4">
+            {% for member in team %}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="team-card">
+                    <div class="photo-wrap">
+                        {% if member.photo %}
+                        <img src="{{ member.photo.url }}" alt="{{ member.name }}">
+                        {% else %}
+                        <div class="photo-placeholder">{{ member.name|slice:":1" }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <span class="role-badge">{{ member.role }}</span>
+                        <h6 class="fw-bold text-dark mb-1" style="font-family:'Playfair Display',serif;">{{ member.name }}</h6>
+                        {% if member.bio %}
+                        <p class="text-secondary small mb-2">{{ member.bio|truncatewords:18 }}</p>
+                        {% endif %}
+                        <div class="d-flex gap-2 mt-2">
+                            {% if member.email %}
+                            <a href="mailto:{{ member.email }}" class="btn btn-sm btn-outline-secondary rounded-circle"
+                               style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;padding:0;">
+                                <i class="fas fa-envelope" style="font-size:0.7rem;"></i>
+                            </a>
+                            {% endif %}
+                            {% if member.linkedin_url %}
+                            <a href="{{ member.linkedin_url }}" target="_blank" rel="noopener"
+                               class="btn btn-sm rounded-circle text-white"
+                               style="width:30px;height:30px;background:#0A66C2;display:flex;align-items:center;justify-content:center;padding:0;">
+                                <i class="fab fa-linkedin-in" style="font-size:0.7rem;"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5 text-muted">
+            <i class="fas fa-users fa-3x mb-3 d-block opacity-25"></i>
+            <p>Add team members in the <a href="/admin/website/teammember/" style="color:var(--primary-maroon);">CMS</a>.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{# ── PARTNERS FULL ────────────────────────────────────────────────────────── #}
+<section class="py-5 bg-white border-top">
+    <div class="container text-center">
+        <h2 class="section-title">Our Partners</h2>
+        <p class="text-muted mb-5">Organizations that believe in Mathare's potential</p>
+        <div class="row g-4 justify-content-center align-items-center">
+            <div class="col-6 col-md-3">
+               <div class="p-4 rounded-3 bg-light partner-logo">
+                   <h5 class="text-secondary fw-bold mb-0">MOVE92</h5>
+               </div>
+           </div>
+           <div class="col-6 col-md-3">
+               <div class="p-4 rounded-3 bg-light partner-logo">
+                   <h5 class="text-secondary fw-bold mb-0">JUMP!</h5>
+               </div>
+           </div>
+           <div class="col-6 col-md-3">
+               <div class="p-4 rounded-3 bg-light partner-logo">
+                   <h5 class="text-secondary fw-bold mb-0">DIAR AWARDS</h5>
+               </div>
+           </div>
+           <div class="col-6 col-md-3">
+               <div class="p-4 rounded-3 bg-light partner-logo">
+                   <h5 class="text-secondary fw-bold mb-0">MATHARE HUB</h5>
+               </div>
+           </div>
+        </div>
+    </div>
+</section>
+
+{# ── CTA ──────────────────────────────────────────────────────────────────── #}
+<section class="py-5 text-white text-center"
+         style="background: linear-gradient(135deg, var(--maroon-dark), var(--primary-maroon));">
+    <div class="container">
+        <h2 class="fw-bold mb-3" style="font-family:'Playfair Display',serif;">
+            Become Part of the Story
+        </h2>
+        <p class="lead mb-4 opacity-75">Your support keeps 15 years of impact alive.</p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <button class="btn btn-warning btn-lg fw-bold rounded-pill px-4"
+                    data-bs-toggle="modal" data-bs-target="#donationModal">
+                <i class="fas fa-heart me-2"></i>Donate Now
+            </button>
+            <a href="{% url 'website:contact' %}" class="btn btn-outline-light btn-lg fw-bold rounded-pill px-4">
+                <i class="fas fa-envelope me-2"></i>Get In Touch
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

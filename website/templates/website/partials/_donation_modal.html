@@ -1,0 +1,309 @@
+{% load static %}
+<div class="modal fade" id="donationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+
+            <!-- Header -->
+            <div class="modal-header border-0 pb-0"
+                 style="background: linear-gradient(135deg, #5D1818, #8B2323); position: relative;">
+                <div class="w-100 text-center pt-3 pb-2">
+                    <div class="mb-2">
+                        <i class="fas fa-hands-helping fa-2x" style="color: #E88D14;"></i>
+                    </div>
+                    <h3 class="fw-bold text-white mb-1" style="font-family:'Playfair Display',serif;">
+                        Support Mathare Valley
+                    </h3>
+                    <p class="text-white-50 small mb-0">Your gift empowers a youth today</p>
+                </div>
+                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+                        data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body px-4 py-4">
+
+                {# ── Step 1: Choose amount ────────────────────────────────── #}
+                <div id="stepAmount">
+                    <p class="text-muted small fw-bold text-uppercase text-center mb-3"
+                       style="letter-spacing:1px;">Step 1 of 2 — Choose Amount</p>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-4">
+                            <button class="btn btn-outline-secondary w-100 fw-bold rounded-pill amount-btn" data-amount="500">KES 500</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn btn-outline-secondary w-100 fw-bold rounded-pill amount-btn" data-amount="1000">KES 1,000</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn btn-outline-secondary w-100 fw-bold rounded-pill amount-btn" data-amount="2500">KES 2,500</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn btn-outline-secondary w-100 fw-bold rounded-pill amount-btn" data-amount="5000">KES 5,000</button>
+                        </div>
+                        <div class="col-8">
+                            <input type="number" id="customAmount"
+                                   class="form-control rounded-pill text-center"
+                                   placeholder="Custom amount (KES)" min="100">
+                        </div>
+                    </div>
+
+                    <button id="btnNextStep" class="btn w-100 fw-bold btn-lg rounded-pill mt-2"
+                            style="background:var(--primary-maroon); color:white; border:none;">
+                        Continue <i class="fas fa-arrow-right ms-1"></i>
+                    </button>
+                </div>
+
+                {# ── Step 2: Donor details + M-Pesa ──────────────────────── #}
+                <div id="stepDetails" style="display:none;">
+                    <p class="text-muted small fw-bold text-uppercase text-center mb-3"
+                       style="letter-spacing:1px;">Step 2 of 2 — Your Details</p>
+
+                    <!-- Selected amount badge -->
+                    <div class="text-center mb-4">
+                        <span class="badge rounded-pill px-4 py-2 fw-bold fs-6"
+                              style="background:var(--primary-maroon); color:white;">
+                            Donating: KES <span id="amountDisplay">0</span>
+                        </span>
+                        <button id="btnChangeAmount" class="btn btn-sm btn-link ms-2"
+                                style="color:var(--accent-orange); font-size:0.8rem;">
+                            Change
+                        </button>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-uppercase"
+                               style="letter-spacing:0.5px; color:#555;">
+                            <i class="fas fa-user me-1"></i> Your Name
+                        </label>
+                        <input type="text" id="donorName"
+                               class="form-control rounded-pill text-center"
+                               placeholder="Jane Wanjiku">
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-uppercase"
+                               style="letter-spacing:0.5px; color:#555;">
+                            <i class="fas fa-envelope me-1"></i> Email
+                            <span class="text-muted fw-normal">(for receipt)</span>
+                        </label>
+                        <input type="email" id="donorEmail"
+                               class="form-control rounded-pill text-center"
+                               placeholder="jane@example.com">
+                        <div class="form-text text-center" style="font-size:0.75rem;">
+                            <i class="fas fa-lock me-1"></i>
+                            Your official receipt will be sent here. We never share your email.
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-uppercase"
+                               style="letter-spacing:0.5px; color:#555;">
+                            <i class="fab fa-whatsapp me-1" style="color:#25D366;"></i>
+                            M-Pesa Number
+                        </label>
+                        <input type="tel" id="mpesaPhone"
+                               class="form-control form-control-lg text-center rounded-pill bg-light"
+                               placeholder="07XX XXX XXX" maxlength="12">
+                    </div>
+
+                    <button id="payBtn" class="btn w-100 fw-bold btn-lg rounded-pill shadow-sm text-white"
+                            style="background: linear-gradient(135deg, #25D366, #128C7E); border: none;">
+                        <i class="fas fa-lock me-2"></i>PROCEED TO PAY
+                    </button>
+
+                    <div id="donationStatusBox" class="mt-3 p-3 rounded d-none"
+                         style="font-size:0.9rem;"></div>
+
+                    <p class="text-center text-muted mt-3 mb-0" style="font-size:0.72rem;">
+                        <i class="fas fa-shield-alt me-1"></i>
+                        Secured by Safaricom M-Pesa. A receipt will be emailed to you instantly.
+                    </p>
+                </div>
+
+            </div><!-- end modal-body -->
+        </div>
+    </div>
+</div>
+
+<script>
+(() => {
+    let selectedAmount = 0;
+
+    // ── Step navigation ────────────────────────────────────────────────────
+    const stepAmount  = document.getElementById('stepAmount');
+    const stepDetails = document.getElementById('stepDetails');
+    const amountDisplay = document.getElementById('amountDisplay');
+
+    document.getElementById('btnNextStep').addEventListener('click', () => {
+        const custom = parseInt(document.getElementById('customAmount').value) || 0;
+        if (!selectedAmount && !custom) {
+            showStatus('error', '<i class="fas fa-exclamation-circle me-1"></i>Please select or enter a donation amount.');
+            return;
+        }
+        if (custom) selectedAmount = custom;
+        amountDisplay.textContent = selectedAmount.toLocaleString();
+        stepAmount.style.display  = 'none';
+        stepDetails.style.display = 'block';
+        document.getElementById('donationStatusBox').classList.add('d-none');
+    });
+
+    document.getElementById('btnChangeAmount').addEventListener('click', () => {
+        stepDetails.style.display = 'none';
+        stepAmount.style.display  = 'block';
+    });
+
+    // Reset to Step 1 each time modal opens
+    document.getElementById('donationModal').addEventListener('show.bs.modal', () => {
+        stepDetails.style.display = 'none';
+        stepAmount.style.display  = 'block';
+        selectedAmount = 0;
+        document.querySelectorAll('.amount-btn').forEach(b => {
+            b.classList.remove('btn-dark');
+            b.classList.add('btn-outline-secondary');
+        });
+        document.getElementById('customAmount').value = '';
+        document.getElementById('donorName').value    = '';
+        document.getElementById('donorEmail').value   = '';
+        document.getElementById('mpesaPhone').value   = '';
+        document.getElementById('donationStatusBox').classList.add('d-none');
+        resetPayBtn();
+    });
+
+    // ── Amount pill selection ──────────────────────────────────────────────
+    document.querySelectorAll('.amount-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.amount-btn').forEach(b => {
+                b.classList.remove('btn-dark');
+                b.classList.add('btn-outline-secondary');
+            });
+            btn.classList.remove('btn-outline-secondary');
+            btn.classList.add('btn-dark');
+            selectedAmount = parseInt(btn.dataset.amount);
+            document.getElementById('customAmount').value = '';
+        });
+    });
+
+    document.getElementById('customAmount').addEventListener('input', function () {
+        document.querySelectorAll('.amount-btn').forEach(b => {
+            b.classList.remove('btn-dark');
+            b.classList.add('btn-outline-secondary');
+        });
+        selectedAmount = parseInt(this.value) || 0;
+    });
+
+    // ── Status display ─────────────────────────────────────────────────────
+    const statusBox = document.getElementById('donationStatusBox');
+
+    function showStatus(type, message) {
+        const styles = {
+            success: 'background:#d4edda; color:#155724;',
+            pending: 'background:#fff3cd; color:#856404;',
+            error:   'background:#f8d7da; color:#721c24;',
+        };
+        statusBox.style.cssText = styles[type] || styles.error;
+        statusBox.innerHTML = message;
+        statusBox.classList.remove('d-none');
+    }
+
+    const payBtn = document.getElementById('payBtn');
+
+    function resetPayBtn() {
+        payBtn.disabled = false;
+        payBtn.innerHTML = '<i class="fas fa-lock me-2"></i>PROCEED TO PAY';
+    }
+
+    // ── STK Push ───────────────────────────────────────────────────────────
+    payBtn.addEventListener('click', async () => {
+        const phone = document.getElementById('mpesaPhone').value.trim();
+        const name  = document.getElementById('donorName').value.trim();
+        const email = document.getElementById('donorEmail').value.trim();
+
+        if (!phone || phone.length < 10) {
+            showStatus('error', '<i class="fas fa-exclamation-circle me-1"></i>Please enter a valid M-Pesa number.');
+            return;
+        }
+
+        payBtn.disabled = true;
+        payBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending…';
+        showStatus('pending', '<i class="fas fa-mobile-alt me-1"></i>Sending STK Push to your phone…');
+
+        try {
+            const res = await fetch('/mpesa/stk-push/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken':  getCookie('csrftoken'),
+                },
+                body: JSON.stringify({
+                    phone,
+                    amount:     selectedAmount,
+                    donor_name: name,
+                    donor_email: email,
+                }),
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                const emailNote = email
+                    ? ` A receipt will be emailed to <strong>${email}</strong>.`
+                    : '';
+                showStatus('pending',
+                    `📱 <strong>Check your phone!</strong> Enter your M-Pesa PIN to complete.${emailNote}`);
+                pollDonation(data.checkout_request_id, email);
+            } else {
+                showStatus('error', `<i class="fas fa-times-circle me-1"></i>${data.error || 'Payment failed. Try again.'}`);
+                resetPayBtn();
+            }
+        } catch {
+            showStatus('error', '<i class="fas fa-wifi me-1"></i>Network error. Check your connection and try again.');
+            resetPayBtn();
+        }
+    });
+
+    // ── Poll for result ────────────────────────────────────────────────────
+    function pollDonation(checkoutRequestId, email, attempts = 0) {
+        if (attempts > 12) {
+            showStatus('error', 'Timed out waiting for confirmation. Check your M-Pesa messages.');
+            resetPayBtn();
+            return;
+        }
+
+        setTimeout(async () => {
+            try {
+                const res  = await fetch(`/mpesa/status/?checkout_request_id=${checkoutRequestId}`);
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    const receiptLine = data.receipt
+                        ? `<br><small>M-Pesa Receipt: <strong>${data.receipt}</strong></small>` : '';
+                    const emailLine = email
+                        ? `<br><small>Your official receipt has been emailed to <strong>${email}</strong>.</small>` : '';
+
+                    showStatus('success',
+                        `✅ <strong>Thank you!</strong> KES ${Number(data.amount).toLocaleString()} received.`
+                        + receiptLine + emailLine
+                    );
+                    resetPayBtn();
+
+                } else if (data.status === 'failed') {
+                    showStatus('error', '❌ Payment failed. Please try again.');
+                    resetPayBtn();
+
+                } else if (data.status === 'cancelled') {
+                    showStatus('error', 'Payment was cancelled. Try again when ready.');
+                    resetPayBtn();
+
+                } else {
+                    pollDonation(checkoutRequestId, email, attempts + 1);
+                }
+            } catch {
+                pollDonation(checkoutRequestId, email, attempts + 1);
+            }
+        }, 5000);
+    }
+})();
+</script>

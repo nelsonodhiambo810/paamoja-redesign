@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Donation Receipt — PaaMoja Initiative</title>
+    <!--[if mso]>
+    <noscript>
+        <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
+    </noscript>
+    <![endif]-->
+    <style>
+        /* Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333333;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: #E88D14; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        img { border: 0; display: block; }
+
+        /* Wrapper */
+        .email-wrapper {
+            width: 100%;
+            background-color: #f4f4f4;
+            padding: 40px 20px;
+        }
+
+        /* Container */
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+
+        /* Header */
+        .email-header {
+            background: linear-gradient(135deg, #5D1818 0%, #8B2323 60%, #C0392B 100%);
+            padding: 48px 40px 40px;
+            text-align: center;
+            position: relative;
+        }
+        .email-header::after {
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: -1px; left: 0; right: 0;
+            height: 40px;
+            background: #ffffff;
+            clip-path: ellipse(55% 100% at 50% 100%);
+        }
+        .brand-name {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            opacity: 0.85;
+        }
+        .brand-name span { color: #E88D14; }
+        .checkmark-circle {
+            width: 72px;
+            height: 72px;
+            background: rgba(255,255,255,0.15);
+            border: 3px solid rgba(255,255,255,0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 32px;
+        }
+        .header-title {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            font-family: Georgia, 'Times New Roman', serif;
+        }
+        .header-subtitle {
+            color: rgba(255,255,255,0.75);
+            font-size: 15px;
+        }
+
+        /* Body */
+        .email-body {
+            padding: 48px 40px 32px;
+        }
+
+        .greeting {
+            font-size: 18px;
+            font-weight: 700;
+            color: #5D1818;
+            margin-bottom: 16px;
+            font-family: Georgia, 'Times New Roman', serif;
+        }
+
+        .intro-text {
+            font-size: 15px;
+            color: #555555;
+            margin-bottom: 32px;
+            line-height: 1.7;
+        }
+
+        /* Receipt Box */
+        .receipt-box {
+            background: #fafafa;
+            border: 2px solid #f0e8e8;
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 32px;
+        }
+        .receipt-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #999;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .receipt-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .receipt-row:last-child { border-bottom: none; }
+        .receipt-label {
+            font-size: 13px;
+            color: #888;
+            font-weight: 500;
+        }
+        .receipt-value {
+            font-size: 14px;
+            color: #333;
+            font-weight: 700;
+            text-align: right;
+        }
+        .receipt-value.amount {
+            font-size: 22px;
+            color: #5D1818;
+            font-family: Georgia, serif;
+        }
+        .receipt-value.receipt-no {
+            font-family: 'Courier New', monospace;
+            background: #5D1818;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        /* Impact section */
+        .impact-section {
+            background: linear-gradient(135deg, #5D1818, #8B2323);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 32px;
+            color: white;
+        }
+        .impact-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #E88D14;
+            margin-bottom: 16px;
+        }
+        .impact-statement {
+            font-size: 16px;
+            color: white;
+            line-height: 1.7;
+            font-style: italic;
+            font-family: Georgia, serif;
+            margin-bottom: 20px;
+        }
+        .impact-grid {
+            display: table;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 8px;
+        }
+        .impact-item {
+            display: table-cell;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            width: 33.3%;
+        }
+        .impact-number {
+            font-size: 20px;
+            font-weight: 800;
+            color: #E88D14;
+            font-family: Georgia, serif;
+            display: block;
+        }
+        .impact-desc {
+            font-size: 11px;
+            color: rgba(255,255,255,0.7);
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* Founders note */
+        .founders-note {
+            border-left: 4px solid #E88D14;
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            background: #fffbf5;
+            border-radius: 0 8px 8px 0;
+        }
+        .founders-note p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 12px;
+            font-style: italic;
+            font-family: Georgia, serif;
+        }
+        .founders-note .signature {
+            font-size: 13px;
+            font-weight: 700;
+            color: #5D1818;
+            font-style: normal;
+        }
+        .founders-note .signature-role {
+            font-size: 12px;
+            color: #888;
+            font-style: normal;
+        }
+
+        /* CTA */
+        .cta-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #5D1818, #8B2323);
+            color: white !important;
+            padding: 14px 36px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-decoration: none !important;
+        }
+        .cta-subtext {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 12px;
+        }
+
+        /* Footer */
+        .email-footer {
+            background: #1a1a1a;
+            padding: 32px 40px;
+            text-align: center;
+        }
+        .footer-brand {
+            font-size: 16px;
+            font-weight: 800;
+            color: #E88D14;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .footer-tagline {
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        .footer-links {
+            margin-bottom: 20px;
+        }
+        .footer-links a {
+            color: #888 !important;
+            font-size: 12px;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        .footer-links a:hover { color: #E88D14 !important; }
+        .footer-contact {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.8;
+        }
+        .footer-legal {
+            font-size: 11px;
+            color: #444;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #2a2a2a;
+            line-height: 1.6;
+        }
+
+        /* Mobile */
+        @media only screen and (max-width: 600px) {
+            .email-body { padding: 32px 24px 24px; }
+            .email-header { padding: 36px 24px 32px; }
+            .header-title { font-size: 22px; }
+            .receipt-box { padding: 20px; }
+            .impact-section { padding: 20px; }
+            .impact-grid { display: block; }
+            .impact-item { display: block; width: 100%; margin-bottom: 8px; }
+            .email-footer { padding: 24px 20px; }
+            .receipt-value.amount { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+<div class="email-wrapper">
+<div class="email-container">
+
+    <!-- ── HEADER ── -->
+    <div class="email-header">
+        <div class="brand-name"><span>Paa</span>Moja Initiative</div>
+        <div class="checkmark-circle">✓</div>
+        <h1 class="header-title">Donation Confirmed!</h1>
+        <p class="header-subtitle">Your generosity just changed a life in Mathare.</p>
+    </div>
+
+    <!-- ── BODY ── -->
+    <div class="email-body">
+
+        <!-- Greeting -->
+        <p class="greeting">Dear {{ donor_name }},</p>
+        <p class="intro-text">
+            On behalf of the entire PaaMoja Initiative family and the youth of Mathare Valley —
+            <strong>thank you.</strong> Your contribution has been received and is already being put
+            to work for our community programs. Below is your official receipt for your records.
+        </p>
+
+        <!-- Receipt -->
+        <div class="receipt-box">
+            <div class="receipt-title">🧾 Official Receipt</div>
+
+            <div class="receipt-row">
+                <span class="receipt-label">Amount Donated</span>
+                <span class="receipt-value amount">KES {{ amount|floatformat:0 }}</span>
+            </div>
+            <div class="receipt-row">
+                <span class="receipt-label">M-Pesa Receipt No.</span>
+                <span class="receipt-value receipt-no">{{ mpesa_receipt }}</span>
+            </div>
+            <div class="receipt-row">
+                <span class="receipt-label">Phone Number</span>
+                <span class="receipt-value">{{ phone_number }}</span>
+            </div>
+            <div class="receipt-row">
+                <span class="receipt-label">Date & Time</span>
+                <span class="receipt-value">{{ transaction_date }}</span>
+            </div>
+            <div class="receipt-row">
+                <span class="receipt-label">Recipient</span>
+                <span class="receipt-value">PaaMoja Initiative</span>
+            </div>
+            <div class="receipt-row">
+                <span class="receipt-label">Payment Method</span>
+                <span class="receipt-value">Safaricom M-Pesa</span>
+            </div>
+        </div>
+
+        <!-- Impact -->
+        <div class="impact-section">
+            <div class="impact-label">⚡ Your Impact</div>
+            <p class="impact-statement">
+                "{{ impact_statement }}"
+            </p>
+            <div class="impact-grid">
+                <div class="impact-item">
+                    <span class="impact-number">500K+</span>
+                    <span class="impact-desc">Lives Reached</span>
+                </div>
+                <div class="impact-item">
+                    <span class="impact-number">15+</span>
+                    <span class="impact-desc">Years of Service</span>
+                </div>
+                <div class="impact-item">
+                    <span class="impact-number">6</span>
+                    <span class="impact-desc">Active Programs</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Founder's Note -->
+        <div class="founders-note">
+            <p>
+                "Every shilling that comes to PaaMoja goes directly to the hands, hearts, and minds
+                of Mathare's young people. We don't take this trust lightly. This receipt is not
+                just a transaction record — it is proof that you stood with us."
+            </p>
+            <div class="signature">The PaaMoja Initiative Team</div>
+            <div class="signature-role">Mathare Valley, Nairobi · Est. 2009</div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-section">
+            <a href="https://paamoja.org/about/" class="cta-btn">
+                See Our Work in Action →
+            </a>
+            <p class="cta-subtext">
+                Share our mission with someone who cares.
+            </p>
+        </div>
+
+    </div><!-- end email-body -->
+
+    <!-- ── FOOTER ── -->
+    <div class="email-footer">
+        <div class="footer-brand">PaaMoja Initiative</div>
+        <div class="footer-tagline">"Follow. Learn. Lead."</div>
+        <div class="footer-links">
+            <a href="https://paamoja.org/">Website</a>
+            <a href="https://paamoja.org/about/">About Us</a>
+            <a href="https://paamoja.org/contact/">Contact</a>
+        </div>
+        <div class="footer-contact">
+            Mathare Valley, Nairobi, Kenya<br>
+            📞 +254 793 794 885 &nbsp;|&nbsp; ✉ info@paamoja.org
+        </div>
+        <div class="footer-legal">
+            This is an official donation receipt from PaaMoja Initiative, a registered NGO in Kenya.
+            Please keep this email for your personal financial records.<br><br>
+            © {% now "Y" %} PaaMoja Initiative. All rights reserved.
+        </div>
+    </div>
+
+</div><!-- end email-container -->
+</div><!-- end email-wrapper -->
+</body>
+</html>

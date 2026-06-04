@@ -1,0 +1,60 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PaaMoja Initiative — Official Donation Receipt
+Mathare Valley, Nairobi, Kenya
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dear {{ donor_name }},
+
+THANK YOU. Your donation has been confirmed and officially received
+by PaaMoja Initiative.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OFFICIAL RECEIPT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Amount Donated  :  KES {{ amount|floatformat:0 }}
+  M-Pesa Receipt  :  {{ mpesa_receipt }}
+  Phone Number    :  {{ phone_number }}
+  Date & Time     :  {{ transaction_date }}
+  Recipient       :  PaaMoja Initiative
+  Payment Method  :  Safaricom M-Pesa
+
+Please keep this email as your official record of donation.
+It may be used for personal financial tracking.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+YOUR IMPACT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{{ impact_statement }}
+
+Together, we have reached:
+  • 500,000+ residents across Mathare Valley
+  • 15+ years of uninterrupted community service
+  • 6 active youth empowerment programs
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A NOTE FROM OUR TEAM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+"Every shilling that comes to PaaMoja goes directly to the hands,
+hearts, and minds of Mathare's young people. We don't take this
+trust lightly. This receipt is not just a transaction record —
+it is proof that you stood with us."
+
+  — The PaaMoja Initiative Team
+    Mathare Valley, Nairobi · Est. 2009
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONTACT US
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Website  : https://paamoja.org
+  Email    : info@paamoja.org
+  Phone    : +254 793 794 885
+  Location : Mathare Valley, Nairobi, Kenya
+
+"Follow. Learn. Lead."
+
+© PaaMoja Initiative. Registered NGO, Kenya.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -1,0 +1,18 @@
+New contact inquiry received via paamoja.org
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Name:    {{ inquiry.name }}
+Email:   {{ inquiry.email }}
+Phone:   {{ inquiry.phone|default:"Not provided" }}
+Subject: {{ inquiry.get_subject_display }}
+Date:    {{ inquiry.created_at|date:"N j, Y — P" }}
+
+MESSAGE:
+━━━━━━━━
+{{ inquiry.message }}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Reply directly to: {{ inquiry.email }}
+View in CMS: https://paamoja.org/admin/website/contactinquiry/{{ inquiry.id }}/change/
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PaaMoja Initiative — Mathare Valley, Nairobi

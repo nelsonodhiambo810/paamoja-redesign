@@ -1,0 +1,230 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}PaaMoja Initiative — Follow. Learn. Lead. | Mathare Valley, Nairobi{% endblock %}
+{% block meta_description %}PaaMoja Initiative empowers youth in Mathare Valley through leadership, life skills, and sexuality education. Donate via M-Pesa and help us reach more lives.{% endblock %}
+
+{% block content %}
+
+{# ── HERO ─────────────────────────────────────────────────────────────────── #}
+<header class="text-white text-center py-5"
+        style="background: linear-gradient(135deg, #5D1818 0%, #8B2323 45%, #C0392B 75%, #E88D14 100%);
+               min-height: 65vh; display: flex; align-items: center;">
+    <div class="container">
+        <p class="text-warning small fw-bold text-uppercase mb-2" style="letter-spacing:3px;">
+            Mathare Valley, Nairobi · Est. 2009
+        </p>
+        <h1 class="display-2 fw-bold mb-3" style="font-family:'Playfair Display',serif; text-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+            Follow. Learn. Lead.
+        </h1>
+        <p class="lead mb-4 fs-4" style="max-width:600px; margin:0 auto 1.5rem;">
+            Empowering the youth of Mathare Valley to design their own future — for 15+ years.
+        </p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="#programs" class="btn btn-outline-light btn-lg fw-bold px-4">
+                <i class="fas fa-hands-helping me-2"></i>View Programs
+            </a>
+            <a href="{% url 'website:about' %}" class="btn btn-warning btn-lg fw-bold px-4">
+                <i class="fas fa-users me-2"></i>Our Story
+            </a>
+        </div>
+    </div>
+</header>
+
+{# ── PARTNERS STRIP ───────────────────────────────────────────────────────── #}
+<section class="py-4 bg-white border-bottom shadow-sm">
+    <div class="container text-center">
+        <p class="text-muted small fw-bold text-uppercase mb-3" style="letter-spacing:2px;">
+            Supported By Our Partners
+        </p>
+        <div class="d-flex justify-content-center align-items-center flex-wrap gap-5 opacity-75">
+            <h4 class="text-secondary fw-bold mb-0 partner-logo">MOVE92</h4>
+            <h4 class="text-secondary fw-bold mb-0 partner-logo">JUMP!</h4>
+            <h4 class="text-secondary fw-bold mb-0 partner-logo">DIAR AWARDS</h4>
+            <h4 class="text-secondary fw-bold mb-0 partner-logo">MATHARE HUB</h4>
+        </div>
+    </div>
+</section>
+
+{# ── IMPACT COUNTERS ──────────────────────────────────────────────────────── #}
+<section class="py-5 text-white" style="background-color: var(--primary-maroon);">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4 mb-3">
+                <h2 class="display-4 fw-bold counter" data-target="500000">0</h2>
+                <p class="fs-5 text-warning mb-0">Residents Reached</p>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h2 class="display-4 fw-bold counter" data-target="15">0</h2>
+                <p class="fs-5 text-warning mb-0">Years of Service</p>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h2 class="display-4 fw-bold counter" data-target="6">0</h2>
+                <p class="fs-5 text-warning mb-0">Core Programs</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ── NEWS + PROGRAMS ──────────────────────────────────────────────────────── #}
+<div class="container py-5">
+    <div class="row">
+
+        {# News #}
+        <div class="col-lg-4 mb-5" id="news">
+            <h3 class="section-title">Latest Updates</h3>
+            <div class="list-group list-group-flush border-0">
+                {% for item in news %}
+                <a href="{{ item.link }}" class="list-group-item list-group-item-action p-4 premium-card mb-3 shadow-sm text-decoration-none">
+                    <h5 class="mb-1 text-dark fw-bold">{{ item.title }}</h5>
+                    <p class="news-date mb-1">
+                        <i class="fas fa-calendar-alt me-1"></i>{{ item.date|date:"N j, Y" }}
+                    </p>
+                    {% if item.summary %}
+                    <p class="text-muted small mb-1">{{ item.summary|truncatewords:12 }}</p>
+                    {% endif %}
+                    <small class="fw-bold" style="color:var(--primary-maroon);">Read more &rarr;</small>
+                </a>
+                {% empty %}
+                <div class="p-4 text-center text-muted premium-card shadow-sm">
+                    <i class="fas fa-newspaper fa-2x mb-2 d-block opacity-25"></i>
+                    No news updates yet.
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {# Programs #}
+        <div class="col-lg-8" id="programs">
+            <h3 class="section-title">Our Impact Programs</h3>
+            <div class="row">
+                {% for program in programs %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm premium-card">
+                        {% if program.image %}
+                        <img src="{{ program.image.url }}" class="card-img-top"
+                             style="height:200px; object-fit:cover;" alt="{{ program.title }}">
+                        {% else %}
+                        <div class="d-flex align-items-center justify-content-center text-white fw-bold"
+                             style="height:200px; background:linear-gradient(135deg, var(--primary-maroon), #8B2323);">
+                            <div class="text-center">
+                                <i class="fas fa-hands-helping fa-2x mb-2 d-block" style="color:var(--accent-orange);"></i>
+                                {{ program.title }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold" style="color:var(--primary-maroon); font-family:'Playfair Display',serif;">
+                                {{ program.title }}
+                            </h5>
+                            <p class="card-text text-secondary">{{ program.description|truncatewords:25 }}</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pb-3">
+                            <button class="btn btn-sm fw-bold rounded-pill"
+                                    style="background:var(--primary-maroon); color:white;"
+                                    data-bs-toggle="modal" data-bs-target="#donationModal">
+                                <i class="fas fa-heart me-1"></i>Support This Program
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{# ── TESTIMONIALS ─────────────────────────────────────────────────────────── #}
+<section class="py-5 bg-white border-top">
+    <div class="container text-center">
+        <h2 class="section-title">Voices of Mathare</h2>
+        <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for story in stories %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="d-flex flex-column align-items-center px-3">
+                        {% if story.photo %}
+                        <img src="{{ story.photo.url }}" class="rounded-circle mb-3 shadow"
+                             style="width:120px;height:120px;border:4px solid var(--accent-orange);object-fit:cover;"
+                             alt="{{ story.name }}">
+                        {% else %}
+                        <div class="rounded-circle mb-3 shadow d-flex align-items-center justify-content-center text-white fw-bold"
+                             style="width:120px;height:120px;border:4px solid var(--accent-orange);background:var(--primary-maroon);font-size:2rem;">
+                            {{ story.name|slice:":1" }}
+                        </div>
+                        {% endif %}
+                        <figure class="text-center" style="max-width:700px;">
+                            <blockquote class="blockquote">
+                                <p class="fs-4 fst-italic text-dark">"{{ story.quote }}"</p>
+                            </blockquote>
+                            <figcaption class="blockquote-footer mt-3 fs-6">
+                                <strong class="text-dark">{{ story.name }}</strong> |
+                                <cite style="color:var(--primary-maroon);">{{ story.role }}</cite>
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="carousel-item active">
+                    <p class="text-muted py-5">No stories yet. Add some in the CMS.</p>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark rounded-circle" style="padding:20px;" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-dark rounded-circle" style="padding:20px;" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+</section>
+
+{# ── CTA BAND ─────────────────────────────────────────────────────────────── #}
+<section class="py-5 text-white text-center"
+         style="background: linear-gradient(135deg, var(--maroon-dark), var(--primary-maroon));">
+    <div class="container">
+        <h2 class="fw-bold mb-3" style="font-family:'Playfair Display',serif;">Ready to Make a Difference?</h2>
+        <p class="lead mb-4 opacity-75">Every shilling moves a young person forward. Join 500,000+ lives touched.</p>
+        <button class="btn btn-warning btn-lg fw-bold rounded-pill px-5 shadow"
+                data-bs-toggle="modal" data-bs-target="#donationModal">
+            <i class="fas fa-heart me-2"></i>Donate via M-Pesa
+        </button>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // ── Intersection Observer counters ──────────────────────────────────────
+    const counters = document.querySelectorAll('.counter');
+    let animated = false;
+
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !animated) {
+                animated = true;
+                counters.forEach(counter => {
+                    const target = +counter.dataset.target;
+                    const speed = 200;
+                    const inc = target / speed;
+                    let count = 0;
+                    const tick = () => {
+                        count = Math.ceil(count + inc);
+                        if (count < target) {
+                            counter.textContent = count.toLocaleString();
+                            setTimeout(tick, 20);
+                        } else {
+                            counter.textContent = target.toLocaleString() + '+';
+                        }
+                    };
+                    tick();
+                });
+            }
+        });
+    }, { threshold: 0.5 });
+
+    if (counters.length) obs.observe(counters[0]);
+</script>
+{% endblock %}

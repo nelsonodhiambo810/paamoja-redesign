@@ -1,0 +1,441 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}Contact Us — PaaMoja Initiative | Mathare Valley, Nairobi{% endblock %}
+{% block meta_description %}Get in touch with PaaMoja Initiative. Inquire about partnerships, volunteering, donations, or media. We're based in Mathare Valley, Nairobi.{% endblock %}
+{% block og_title %}Contact PaaMoja Initiative{% endblock %}
+
+{% block extra_head %}
+<style>
+    .contact-hero {
+        background: linear-gradient(160deg, #1a0808 0%, #5D1818 60%, #8B2323 100%);
+        min-height: 35vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .contact-hero::after {
+        content: '';
+        position: absolute;
+        bottom: -1px; left: 0; right: 0;
+        height: 60px;
+        background: var(--light-bg);
+        clip-path: ellipse(55% 100% at 50% 100%);
+    }
+
+    /* Info cards */
+    .info-card {
+        background: white;
+        border-radius: 16px;
+        padding: 28px;
+        height: 100%;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        border-bottom: 4px solid var(--accent-orange);
+        transition: transform 0.3s;
+        text-align: center;
+    }
+    .info-card:hover { transform: translateY(-6px); }
+    .info-card .icon-wrap {
+        width: 56px; height: 56px;
+        background: linear-gradient(135deg, var(--primary-maroon), #8B2323);
+        border-radius: 14px;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 16px;
+        color: var(--accent-orange);
+        font-size: 1.3rem;
+    }
+
+    /* Form styling */
+    .contact-form-wrap {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+    }
+    .form-control, .form-select {
+        border: 2px solid #eee;
+        border-radius: 10px;
+        padding: 12px 16px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+        font-family: 'Poppins', sans-serif;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-maroon);
+        box-shadow: 0 0 0 3px rgba(93,24,24,0.08);
+    }
+    .form-label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #444;
+        margin-bottom: 6px;
+    }
+    .form-control.is-invalid { border-color: #dc3545; }
+    .invalid-feedback { font-size: 0.8rem; }
+
+    .btn-submit {
+        background: linear-gradient(135deg, var(--primary-maroon), #8B2323);
+        color: white;
+        border: none;
+        border-radius: 30px;
+        padding: 14px 40px;
+        font-weight: 700;
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+        transition: all 0.3s;
+        width: 100%;
+    }
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(93,24,24,0.3);
+        color: white;
+    }
+
+    /* Subject pills */
+    .subject-pill {
+        cursor: pointer;
+        border-radius: 30px;
+        padding: 8px 18px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border: 2px solid #ddd;
+        background: white;
+        transition: all 0.2s;
+        margin: 4px;
+    }
+    .subject-pill:hover,
+    .subject-pill.active {
+        background: var(--primary-maroon);
+        color: white;
+        border-color: var(--primary-maroon);
+    }
+    #subjectInput { display: none; }
+
+    /* Side info panel */
+    .side-panel {
+        background: linear-gradient(160deg, var(--primary-maroon), #3d1010);
+        border-radius: 20px;
+        padding: 36px;
+        color: white;
+        height: 100%;
+    }
+    .side-panel .detail-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        margin-bottom: 24px;
+    }
+    .side-panel .detail-icon {
+        width: 40px; height: 40px;
+        background: rgba(232,141,20,0.15);
+        border: 1px solid rgba(232,141,20,0.3);
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        color: var(--accent-orange);
+        flex-shrink: 0;
+    }
+    .side-panel .detail-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: rgba(255,255,255,0.5);
+        margin-bottom: 2px;
+    }
+    .side-panel .detail-value {
+        color: white;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ── HERO ─────────────────────────────────────────────────────────────────── #}
+<section class="contact-hero text-white text-center py-5">
+    <div class="container" style="position:relative;z-index:1;">
+        <p class="text-warning small fw-bold text-uppercase mb-2" style="letter-spacing:3px;">
+            We'd Love to Hear From You
+        </p>
+        <h1 class="display-4 fw-bold" style="font-family:'Playfair Display',serif;">
+            Get In Touch
+        </h1>
+        <p class="lead opacity-75 mt-2" style="max-width:520px; margin:0 auto;">
+            Partnerships, volunteering, media requests, or just a hello — we respond to every message.
+        </p>
+    </div>
+</section>
+
+{# ── INFO CARDS ───────────────────────────────────────────────────────────── #}
+<section class="py-5" style="background:var(--light-bg);">
+    <div class="container">
+
+        <div class="row g-4 mb-5">
+            <div class="col-sm-6 col-md-3">
+                <div class="info-card">
+                    <div class="icon-wrap"><i class="fas fa-map-marker-alt"></i></div>
+                    <h6 class="fw-bold text-dark mb-1">Location</h6>
+                    <p class="text-muted small mb-0">Mathare Valley<br>Nairobi, Kenya</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="info-card">
+                    <div class="icon-wrap"><i class="fas fa-phone"></i></div>
+                    <h6 class="fw-bold text-dark mb-1">Phone</h6>
+                    <p class="text-muted small mb-0">
+                        <a href="tel:+254712244204" class="text-decoration-none" style="color:var(--primary-maroon);">
+                            +254 793 794 885
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="info-card">
+                    <div class="icon-wrap"><i class="fas fa-envelope"></i></div>
+                    <h6 class="fw-bold text-dark mb-1">Email</h6>
+                    <p class="text-muted small mb-0">
+                        <a href="mailto:info@paamoja.org" class="text-decoration-none" style="color:var(--primary-maroon);">
+                            info@paamoja.org
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="info-card">
+                    <div class="icon-wrap"><i class="fas fa-clock"></i></div>
+                    <h6 class="fw-bold text-dark mb-1">Office Hours</h6>
+                    <p class="text-muted small mb-0">Mon – Fri<br>8:00 AM – 5:00 PM EAT</p>
+                </div>
+            </div>
+        </div>
+
+        {# ── FORM + SIDE PANEL ── #}
+        <div class="row g-4 align-items-start">
+
+            {# Form #}
+            <div class="col-lg-8">
+                <div class="contact-form-wrap">
+                    <h4 class="fw-bold mb-1" style="color:var(--primary-maroon); font-family:'Playfair Display',serif;">
+                        Send Us a Message
+                    </h4>
+                    <p class="text-muted small mb-4">We respond within 2 business days.</p>
+
+                    {% if messages %}
+                    {% for msg in messages %}
+                    <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>{{ msg }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    <form method="POST" action="{% url 'website:contact' %}" novalidate>
+                        {% csrf_token %}
+
+                        {# Subject pills #}
+                        <div class="mb-4">
+                            <label class="form-label">What's this about?</label>
+                            <div>
+                                <button type="button" class="subject-pill active" data-value="general">💬 General</button>
+                                <button type="button" class="subject-pill" data-value="partnership">🤝 Partnership</button>
+                                <button type="button" class="subject-pill" data-value="volunteer">🙋 Volunteer</button>
+                                <button type="button" class="subject-pill" data-value="donation">💛 Donation</button>
+                                <button type="button" class="subject-pill" data-value="media">📰 Media</button>
+                            </div>
+                            <input type="hidden" name="subject" id="subjectInput" value="{{ form_data.subject|default:'general' }}">
+                        </div>
+
+                        {# Name + Email row #}
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="contactName">Full Name <span class="text-danger">*</span></label>
+                                <input type="text" id="contactName" name="name"
+                                       class="form-control {% if errors.name %}is-invalid{% endif %}"
+                                       placeholder="Jane Wanjiku"
+                                       value="{{ form_data.name|default:'' }}" required>
+                                {% if errors.name %}
+                                <div class="invalid-feedback">{{ errors.name }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="contactEmail">Email Address <span class="text-danger">*</span></label>
+                                <input type="email" id="contactEmail" name="email"
+                                       class="form-control {% if errors.email %}is-invalid{% endif %}"
+                                       placeholder="jane@example.com"
+                                       value="{{ form_data.email|default:'' }}" required>
+                                {% if errors.email %}
+                                <div class="invalid-feedback">{{ errors.email }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {# Phone (optional) #}
+                        <div class="mb-3">
+                            <label class="form-label" for="contactPhone">
+                                Phone Number <span class="text-muted fw-normal">(optional)</span>
+                            </label>
+                            <input type="tel" id="contactPhone" name="phone"
+                                   class="form-control"
+                                   placeholder="+254 7XX XXX XXX"
+                                   value="{{ form_data.phone|default:'' }}">
+                        </div>
+
+                        {# Message #}
+                        <div class="mb-4">
+                            <label class="form-label" for="contactMessage">
+                                Message <span class="text-danger">*</span>
+                            </label>
+                            <textarea id="contactMessage" name="message" rows="5"
+                                      class="form-control {% if errors.message %}is-invalid{% endif %}"
+                                      placeholder="Tell us what's on your mind…">{{ form_data.message|default:'' }}</textarea>
+                            {% if errors.message %}
+                            <div class="invalid-feedback">{{ errors.message }}</div>
+                            {% endif %}
+                            <div class="text-end mt-1">
+                                <small id="charCount" class="text-muted">0 / 1000</small>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-paper-plane me-2"></i>Send Message
+                        </button>
+
+                        <p class="text-center text-muted mt-3 mb-0" style="font-size:0.75rem;">
+                            <i class="fas fa-lock me-1"></i>
+                            Your information is private and will never be shared or sold.
+                        </p>
+                    </form>
+                </div>
+            </div>
+
+            {# Side panel #}
+            <div class="col-lg-4">
+                <div class="side-panel">
+                    <h5 class="fw-bold mb-4" style="font-family:'Playfair Display',serif; color:var(--accent-orange);">
+                        Connect With Us
+                    </h5>
+
+                    <div class="detail-row">
+                        <div class="detail-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div>
+                            <div class="detail-label">Postal Address</div>
+                            <div class="detail-value">Mathare Valley<br>P.O. Box XXXXX<br>Nairobi, Kenya</div>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-icon"><i class="fas fa-phone"></i></div>
+                        <div>
+                            <div class="detail-label">Phone / WhatsApp</div>
+                            <div class="detail-value">
+                                <a href="tel:+254712244204" class="text-white text-decoration-none">
+                                    +254 793 794 885
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-icon"><i class="fas fa-envelope"></i></div>
+                        <div>
+                            <div class="detail-label">Email</div>
+                            <div class="detail-value">
+                                <a href="mailto:info@paamoja.org" class="text-white text-decoration-none">
+                                    info@paamoja.org
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr style="border-color:rgba(255,255,255,0.1); margin:24px 0;">
+
+                    <h6 class="fw-bold mb-3" style="color:var(--accent-orange); font-size:0.8rem; text-transform:uppercase; letter-spacing:1px;">
+                        Follow Our Work
+                    </h6>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="btn btn-sm rounded-circle text-white"
+                           style="width:38px;height:38px;background:#1877F2;display:flex;align-items:center;justify-content:center;">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm rounded-circle text-white"
+                           style="width:38px;height:38px;background:#000;display:flex;align-items:center;justify-content:center;">
+                            <i class="fab fa-x-twitter"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm rounded-circle text-white"
+                           style="width:38px;height:38px;background:#0A66C2;display:flex;align-items:center;justify-content:center;">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm rounded-circle text-white"
+                           style="width:38px;height:38px;background:#25D366;display:flex;align-items:center;justify-content:center;">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+
+                    <hr style="border-color:rgba(255,255,255,0.1); margin:24px 0;">
+
+                    <div class="p-3 rounded-3" style="background:rgba(232,141,20,0.1); border:1px solid rgba(232,141,20,0.2);">
+                        <p class="small mb-2 text-white-50">Average response time</p>
+                        <p class="fw-bold mb-0" style="color:var(--accent-orange);">
+                            <i class="fas fa-bolt me-1"></i>Within 2 business days
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>{# end row #}
+    </div>
+</section>
+
+{# ── MAP EMBED ────────────────────────────────────────────────────────────── #}
+<section class="bg-white pt-0 pb-0">
+    <div style="height:360px; background: linear-gradient(135deg, #f0e8e8, #e8d5d5); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px;">
+        {# Replace this div with a real Google Maps embed iframe once you have the API key #}
+        <i class="fas fa-map-marked-alt fa-3x" style="color:var(--primary-maroon); opacity:0.4;"></i>
+        <p class="text-muted fw-bold mb-1">Mathare Valley, Nairobi</p>
+        <a href="https://maps.google.com/?q=Mathare+Valley+Nairobi" target="_blank" rel="noopener"
+           class="btn btn-sm rounded-pill fw-bold"
+           style="background:var(--primary-maroon); color:white; padding:8px 20px;">
+            <i class="fas fa-external-link-alt me-1"></i>Open in Google Maps
+        </a>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Subject pill selector
+    const pills = document.querySelectorAll('.subject-pill');
+    const subjectInput = document.getElementById('subjectInput');
+
+    pills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            pills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            subjectInput.value = pill.dataset.value;
+        });
+    });
+
+    // Restore active pill on validation error
+    const savedSubject = subjectInput.value;
+    if (savedSubject) {
+        pills.forEach(p => {
+            p.classList.toggle('active', p.dataset.value === savedSubject);
+        });
+    }
+
+    // Character counter
+    const msgArea = document.getElementById('contactMessage');
+    const counter = document.getElementById('charCount');
+    if (msgArea) {
+        msgArea.addEventListener('input', () => {
+            const len = msgArea.value.length;
+            counter.textContent = `${len} / 1000`;
+            counter.style.color = len > 900 ? '#dc3545' : '#6c757d';
+            if (len > 1000) msgArea.value = msgArea.value.slice(0, 1000);
+        });
+    }
+</script>
+{% endblock %}
