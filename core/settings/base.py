@@ -16,6 +16,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
+# Used in team alert emails to link directly to the CMS record
+SITE_URL = os.environ.get('SITE_URL', 'https://paamoja.org')
+
 # ─── APPLICATIONS ─────────────────────────────────────────────────────────────
 
 INSTALLED_APPS = [
@@ -26,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
     # Third-party
     'corsheaders',
     # Local
@@ -50,7 +54,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'website' / 'templates', BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -86,6 +90,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -101,18 +106,34 @@ JAZZMIN_SETTINGS = {
     "welcome_sign": "Welcome to the PaaMoja Content Portal",
     "copyright": "PaaMoja Initiative Ltd",
     "show_ui_builder": True,
-    "icons": {
-        "website.Program": "fas fa-hands-helping",
-        "website.NewsUpdate": "fas fa-newspaper",
-        "website.SuccessStory": "fas fa-star",
-        "website.Donation": "fas fa-hand-holding-usd",
-    },
+    
     "order_with_respect_to": [
         "website.Program",
         "website.NewsUpdate",
         "website.SuccessStory",
         "website.Donation",
     ],
+
+    "custom_links": {
+        "website": [{
+            "name": "📊 Live Dashboard",
+            "url":  "/admin/dashboard/",
+            "icon": "fas fa-chart-line",
+        }]
+    },
+    
+    "icons": {
+        "website.Program":              "fas fa-hands-helping",
+        "website.NewsUpdate":           "fas fa-newspaper",
+        "website.SuccessStory":         "fas fa-star",
+        "website.Donation":             "fas fa-hand-holding-usd",
+        "website.VolunteerApplication": "fas fa-user-plus",
+        "website.ImpactReport":         "fas fa-file-pdf",
+        "website.ContactInquiry":       "fas fa-envelope",
+        "website.NewsletterSubscriber": "fas fa-mail-bulk",
+        "website.TeamMember":           "fas fa-users",
+        "website.Milestone":            "fas fa-flag",
+    },
 }
 
 JAZZMIN_UI_TWEAKS = {
@@ -133,5 +154,3 @@ MPESA_CALLBACK_URL = os.environ.get('MPESA_CALLBACK_URL', '')
 
 _cors_origins = os.environ.get('CORS_ALLOWED_ORIGINS', '')
 CORS_ALLOWED_ORIGINS = _cors_origins.split(',') if _cors_origins else []
-import os
-SITE_URL = os.environ.get('SITE_URL', 'https://paamoja.org')

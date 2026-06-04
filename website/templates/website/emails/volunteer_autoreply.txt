@@ -1,0 +1,38 @@
+Dear {{ app.full_name }},
+
+Thank you for applying to volunteer with PaaMoja Initiative!
+
+We have received your application and are genuinely excited about your interest
+in supporting the youth of Mathare Valley.
+
+WHAT HAPPENS NEXT
+━━━━━━━━━━━━━━━━━
+  Step 1 → Our team reviews your application (within 5 business days)
+  Step 2 → We'll reach out via email or phone for a brief 15-minute chat
+  Step 3 → You'll be matched to a program and onboarded
+
+YOUR APPLICATION SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━
+  Program Interest : {{ app.program.title|default:"No preference — will go where needed" }}
+  Availability     : {{ app.get_availability_display }}
+  Commitment       : {{ app.get_commitment_display }}
+
+While you wait, feel free to:
+  • Learn about our programs: https://paamoja.org/programs/
+  • Read our impact reports : https://paamoja.org/impact-reports/
+  • Follow our work         : https://paamoja.org
+
+If you have any questions, reply to this email or contact us directly:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PaaMoja Initiative
+Mathare Valley, Nairobi, Kenya
+📞 +254 793 934 885
+✉  info@paamoja.org
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+"Follow. Learn. Lead."
+
+Thank you again — volunteers like you are the backbone of everything we do.
+
+The PaaMoja Initiative Team

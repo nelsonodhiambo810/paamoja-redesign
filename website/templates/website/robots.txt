@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Block admin and internal endpoints
+Disallow: /admin/
+Disallow: /mpesa/
+Disallow: /newsletter/unsubscribe/
+
+# Sitemap location
+Sitemap: https://paamoja.org/sitemap.xml

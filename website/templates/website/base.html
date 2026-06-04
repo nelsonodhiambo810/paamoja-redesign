@@ -6,6 +6,19 @@
 
     {# ── PRIMARY SEO ───────────────────────────────────────────────────────── #}
     <title>{% block title %}PaaMoja Initiative — Follow. Learn. Lead.{% endblock %}</title>
+
+    <!-- PWA + SEO meta tags -->
+    <meta name="theme-color" content="#5D1818">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PaaMoja">
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="apple-touch-icon" href="/static/img/icons/icon-192x192.png">
+
+    <!-- Sitemap link for search engines -->
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+
     <meta name="description" content="{% block meta_description %}PaaMoja Initiative empowers youth in Mathare Valley, Nairobi through leadership, life skills, and sexuality education. 15+ years of community impact.{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}PaaMoja, Mathare Valley, youth empowerment, Nairobi NGO, Kenya nonprofit, DIYEP, community development{% endblock %}">
     <meta name="author" content="PaaMoja Initiative">
@@ -216,29 +229,32 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center gap-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-white {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'website:home' %}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'website:about' %}">About Us</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{% url 'website:home' %}#programs">Programs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{% url 'website:home' %}#news">News</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'website:contact' %}">Contact</a>
-                    </li>
-                    <li class="nav-item ms-2">
-                        <button type="button" class="btn btn-donate" data-bs-toggle="modal" data-bs-target="#donationModal">
+               <ul class="navbar-nav ms-auto align-items-center gap-1">
+                   <li class="nav-item">
+                       <a class="nav-link text-white {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'website:home' %}">Home</a>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link text-white {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'website:about' %}">About Us</a>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link text-white {% if request.resolver_match.url_name == 'program_list' or request.resolver_match.url_name == 'program_detail' %}active{% endif %}" href="{% url 'website:program_list' %}">Programs</a>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link text-white {% if request.resolver_match.url_name == 'impact_reports' %}active{% endif %}" href="{% url 'website:impact_reports' %}">Impact</a>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link text-white {% if request.resolver_match.url_name == 'volunteer' %}active{% endif %}" href="{% url 'website:volunteer' %}">Volunteer</a>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link text-white {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'website:contact' %}">Contact</a>
+                   </li>
+                   <li class="nav-item ms-2">
+                       <button type="button" class="btn btn-donate" data-bs-toggle="modal" data-bs-target="#donationModal">
                             <i class="fas fa-heart me-1"></i> DONATE
-                        </button>
-                    </li>
-                </ul>
-            </div>
+                       </button>
+                   </li>
+               </ul>
+           </div>
         </div>
     </nav>
 
@@ -291,15 +307,10 @@
                     <h5 class="text-uppercase mb-4 fw-bold" style="color: var(--accent-orange);">Quick Links</h5>
                     <p><a href="{% url 'website:home' %}" class="text-secondary text-decoration-none footer-link">Home</a></p>
                     <p><a href="{% url 'website:about' %}" class="text-secondary text-decoration-none footer-link">About Us</a></p>
-                    <p><a href="{% url 'website:home' %}#programs" class="text-secondary text-decoration-none footer-link">Our Programs</a></p>
-                    <p><a href="{% url 'website:home' %}#news" class="text-secondary text-decoration-none footer-link">Latest News</a></p>
+                    <p><a href="{% url 'website:program_list' %}" class="text-secondary text-decoration-none footer-link">Our Programs</a></p>
+                    <p><a href="{% url 'website:impact_reports' %}" class="text-secondary text-decoration-none footer-link">Impact Reports</a></p>
+                    <p><a href="{% url 'website:volunteer' %}" class="text-secondary text-decoration-none footer-link">Volunteer</a></p>
                     <p><a href="{% url 'website:contact' %}" class="text-secondary text-decoration-none footer-link">Contact Us</a></p>
-                    <p>
-                        <a href="#" class="text-secondary text-decoration-none footer-link"
-                           data-bs-toggle="modal" data-bs-target="#donationModal">
-                            Donate Now
-                        </a>
-                    </p>
                 </div>
 
                 <div class="col-md-4 mx-auto mt-3">
@@ -321,6 +332,37 @@
                             <i class="fas fa-clock me-1" style="color:var(--accent-orange);"></i>
                             Mon–Fri: 8:00 AM – 5:00 PM EAT
                         </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Newsletter Subscribe Strip -->
+            <div class="py-4 border-top mt-5" style="border-color:#2a2a2a !important;">
+                <div class="container">
+                    <div class="row align-items-center g-3">
+                        <div class="col-md-5">
+                            <h6 class="fw-bold text-white mb-1">
+                                <i class="fas fa-envelope me-2" style="color:var(--accent-orange);"></i>
+                                Stay Updated
+                            </h6>
+                            <p class="text-secondary small mb-0">
+                                Get impact stories and program updates — no spam, ever.
+                            </p>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="d-flex gap-2" id="newsletterFormWrap">
+                                <input type="email" id="nlEmail"
+                                       class="form-control rounded-pill bg-dark border-0 text-white"
+                                       placeholder="your@email.com"
+                                       style="background:rgba(255,255,255,0.08) !important;">
+                                <button onclick="subscribeNewsletter()"
+                                        class="btn rounded-pill fw-bold flex-shrink-0"
+                                        style="background:var(--accent-orange); color:white; padding:10px 22px; white-space:nowrap;">
+                                    Subscribe
+                                </button>
+                            </div>
+                            <div id="nlMsg" class="mt-2 small" style="display:none;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -353,7 +395,7 @@
         setTimeout(() => {
             document.querySelectorAll('.alert').forEach(el => {
                 const bsAlert = bootstrap.Alert.getOrCreateInstance(el);
-                bsAlert.close();
+                if (bsAlert) bsAlert.close();
             });
         }, 5000);
 
@@ -365,6 +407,78 @@
             }
             return null;
         }
+
+        // ── PWA Service Worker ───────────────────────────────────────────────────
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker
+                    .register('/static/js/sw.js')
+                    .then(reg => console.log('[SW] Registered:', reg.scope))
+                    .catch(err => console.warn('[SW] Registration failed:', err));
+            });
+        }
+
+        // ── PWA Install prompt ───────────────────────────────────────────────────
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', e => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+
+        // ── Open donation modal if URL has ?donate=1 (PWA shortcut) ─────────────
+        if (new URLSearchParams(window.location.search).get('donate') === '1') {
+            window.addEventListener('DOMContentLoaded', () => {
+                const modal = document.getElementById('donationModal');
+                if (modal) new bootstrap.Modal(modal).show();
+            });
+        }
+
+        // ── Newsletter AJAX subscribe ────────────────────────────────────────────
+        async function subscribeNewsletter() {
+            const email  = document.getElementById('nlEmail').value.trim();
+            const msgEl  = document.getElementById('nlMsg');
+
+            if (!email || !email.includes('@')) {
+                msgEl.style.cssText = 'display:block; color:#f8d7da;';
+                msgEl.textContent   = 'Please enter a valid email address.';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('email',  email);
+            formData.append('source', 'homepage');
+
+            try {
+                const res = await fetch('/newsletter/subscribe/', {
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': getCookie('csrftoken') },
+                    body: formData,
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    msgEl.style.cssText = 'display:block; color:#d4edda;';
+                    msgEl.textContent   = '✓ ' + data.message;
+                    document.getElementById('nlEmail').value = '';
+                } else {
+                    msgEl.style.cssText = 'display:block; color:#f8d7da;';
+                    msgEl.textContent   = data.error || 'Something went wrong. Try again.';
+                }
+            } catch {
+                msgEl.style.cssText = 'display:block; color:#f8d7da;';
+                msgEl.textContent   = 'Network error. Please try again.';
+            }
+        }
+
+        // Allow Enter key on newsletter field
+        document.addEventListener('DOMContentLoaded', () => {
+            const nlInput = document.getElementById('nlEmail');
+            if (nlInput) {
+                nlInput.addEventListener('keydown', e => {
+                    if (e.key === 'Enter') subscribeNewsletter();
+                });
+            }
+        });
     </script>
 
     {% block extra_js %}{% endblock %}

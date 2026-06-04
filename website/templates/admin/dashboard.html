@@ -1,0 +1,420 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block title %}Live Dashboard — PaaMoja CMS{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    :root {
+        --maroon: #5D1818;
+        --orange: #E88D14;
+    }
+
+    .dash-header {
+        background: linear-gradient(135deg, #5D1818, #8B2323);
+        color: white;
+        border-radius: 14px;
+        padding: 28px 32px;
+        margin-bottom: 28px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .dash-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; }
+    .dash-header .sub { font-size: 0.85rem; opacity: 0.7; margin-top: 4px; }
+    .dash-header .time { font-size: 0.8rem; opacity: 0.6; }
+
+    /* ── KPI Cards ── */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+    @media (max-width: 1100px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px)  { .kpi-grid { grid-template-columns: 1fr; } }
+
+    .kpi-card {
+        background: white;
+        border-radius: 12px;
+        padding: 22px 24px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        border-top: 4px solid var(--orange);
+        position: relative;
+        overflow: hidden;
+    }
+    .kpi-card::after {
+        content: attr(data-icon);
+        position: absolute;
+        right: 16px; top: 50%;
+        transform: translateY(-50%);
+        font-size: 2.4rem;
+        opacity: 0.07;
+    }
+    .kpi-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #999;
+        margin-bottom: 8px;
+    }
+    .kpi-value {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--maroon);
+        line-height: 1;
+        margin-bottom: 6px;
+    }
+    .kpi-sub {
+        font-size: 0.78rem;
+        color: #aaa;
+    }
+    .kpi-sub .up   { color: #198754; font-weight: 700; }
+    .kpi-sub .warn { color: #E88D14; font-weight: 700; }
+
+    /* ── Section panels ── */
+    .dash-panel {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+        margin-bottom: 24px;
+    }
+    .dash-panel .panel-head {
+        padding: 16px 22px;
+        border-bottom: 2px solid #f5f5f5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .dash-panel .panel-head h6 {
+        margin: 0;
+        font-weight: 800;
+        color: var(--maroon);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .dash-panel .panel-head a {
+        font-size: 0.78rem;
+        color: var(--orange);
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .dash-panel .panel-body { padding: 0; }
+
+    /* ── Table rows ── */
+    .dash-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 22px;
+        border-bottom: 1px solid #f9f9f9;
+        font-size: 0.85rem;
+    }
+    .dash-row:last-child { border-bottom: none; }
+    .dash-row .label { color: #333; font-weight: 600; }
+    .dash-row .meta  { color: #aaa; font-size: 0.78rem; }
+    .dash-row .amount { color: var(--maroon); font-weight: 800; }
+
+    /* Status pills */
+    .pill {
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+    .pill-pending  { background:#fff3cd; color:#856404; }
+    .pill-accepted { background:#d4edda; color:#155724; }
+    .pill-new      { background:#cfe2ff; color:#0a58ca; }
+
+    /* ── Sparkline ── */
+    .sparkline-wrap {
+        padding: 20px 22px;
+        display: flex;
+        align-items: flex-end;
+        gap: 8px;
+        height: 120px;
+    }
+    .spark-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        height: 100%;
+        justify-content: flex-end;
+    }
+    .spark-bar {
+        width: 100%;
+        background: linear-gradient(180deg, var(--orange), #c47010);
+        border-radius: 4px 4px 0 0;
+        min-height: 4px;
+        transition: height 0.6s ease;
+    }
+    .spark-label {
+        font-size: 0.65rem;
+        color: #bbb;
+        font-weight: 600;
+    }
+    .spark-amt {
+        font-size: 0.62rem;
+        color: #888;
+        writing-mode: vertical-lr;
+        text-orientation: mixed;
+        transform: rotate(180deg);
+        margin-bottom: 4px;
+        display: none;
+    }
+
+    /* ── Content stats grid ── */
+    .content-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0;
+    }
+    .content-stat {
+        text-align: center;
+        padding: 20px 16px;
+        border-right: 1px solid #f5f5f5;
+    }
+    .content-stat:last-child { border-right: none; }
+    .content-stat .num {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--maroon);
+        display: block;
+    }
+    .content-stat .lbl {
+        font-size: 0.72rem;
+        color: #aaa;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+    }
+
+    /* Layout */
+    .dash-two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+    }
+    @media (max-width: 900px) {
+        .dash-two-col { grid-template-columns: 1fr; }
+        .content-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+
+    {# ── Header ── #}
+    <div class="dash-header">
+        <div>
+            <h1>📊 PaaMoja Live Dashboard</h1>
+            <div class="sub">Real-time overview of donations, volunteers, and community engagement</div>
+        </div>
+        <div class="time">
+            Last updated:<br>{{ now|date:"N j, Y · g:i A" }} EAT
+        </div>
+    </div>
+
+    {# ── KPI Cards ── #}
+    <div class="kpi-grid">
+        <div class="kpi-card" data-icon="💰">
+            <div class="kpi-label">Total Donations Received</div>
+            <div class="kpi-value">KES {{ total_donations_kes|floatformat:0 }}</div>
+            <div class="kpi-sub">
+                <span class="up">↑ KES {{ donations_this_month|floatformat:0 }}</span> this month
+            </div>
+        </div>
+        <div class="kpi-card" data-icon="🙋">
+            <div class="kpi-label">Volunteer Applications</div>
+            <div class="kpi-value">{{ volunteer_total }}</div>
+            <div class="kpi-sub">
+                <span class="warn">{{ volunteer_pending }} pending</span> ·
+                {{ volunteer_accepted }} accepted
+            </div>
+        </div>
+        <div class="kpi-card" data-icon="📧">
+            <div class="kpi-label">Newsletter Subscribers</div>
+            <div class="kpi-value">{{ newsletter_total }}</div>
+            <div class="kpi-sub">
+                <span class="up">+{{ newsletter_this_week }}</span> this week ·
+                +{{ newsletter_this_month }} this month
+            </div>
+        </div>
+        <div class="kpi-card" data-icon="💬">
+            <div class="kpi-label">Unread Inquiries</div>
+            <div class="kpi-value">{{ inquiries_new }}</div>
+            <div class="kpi-sub">
+                <a href="/admin/website/contactinquiry/?status__exact=new" style="color:var(--orange);">
+                    View all →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {# ── Content Health ── #}
+    <div class="dash-panel mb-4">
+        <div class="panel-head">
+            <h6>🗂 Content Health</h6>
+            <a href="/admin/website/program/">Manage Content →</a>
+        </div>
+        <div class="content-grid">
+            <div class="content-stat">
+                <span class="num">{{ programs_active }}</span>
+                <span class="lbl">Active Programs</span>
+            </div>
+            <div class="content-stat">
+                <span class="num">{{ reports_published }}</span>
+                <span class="lbl">Published Reports</span>
+            </div>
+            <div class="content-stat">
+                <span class="num">{{ report_downloads }}</span>
+                <span class="lbl">Report Downloads</span>
+            </div>
+            <div class="content-stat">
+                <span class="num">{{ stories_total }}</span>
+                <span class="lbl">Featured Stories</span>
+            </div>
+        </div>
+    </div>
+
+    {# ── Two-col: Sparkline + Newsletter ── #}
+    <div class="dash-two-col mb-0">
+
+        {# Donation Sparkline #}
+        <div class="dash-panel">
+            <div class="panel-head">
+                <h6>📈 Donations — Last 7 Days</h6>
+                <a href="/admin/website/donation/">View All →</a>
+            </div>
+            <div class="sparkline-wrap">
+                {% for bar in sparkline %}
+                {% with pct=bar.total|default:0 %}
+                <div class="spark-col">
+                    <div class="spark-bar"
+                         style="height: {% if sparkline_max > 0 %}{{ bar.total|default:0|floatformat:0 }}{% else %}0{% endif %}%;
+                                height: calc({% widthratio bar.total sparkline_max 80 %}px + 4px);">
+                    </div>
+                    <div class="spark-label">{{ bar.day }}</div>
+                </div>
+                {% endwith %}
+                {% endfor %}
+            </div>
+            <div style="padding:0 22px 16px; font-size:0.78rem; color:#aaa;">
+                This week: <strong style="color:var(--maroon);">KES {{ donations_this_week|floatformat:0 }}</strong>
+                &nbsp;|&nbsp;
+                {{ donation_count_total }} total successful donations
+            </div>
+        </div>
+
+        {# Newsletter growth ── #}
+        <div class="dash-panel">
+            <div class="panel-head">
+                <h6>📬 Newsletter Growth</h6>
+                <a href="/admin/website/newslettersubscriber/">Manage →</a>
+            </div>
+            <div style="padding: 24px 22px;">
+                <div style="display:flex; gap:16px; margin-bottom:20px;">
+                    <div style="flex:1; text-align:center; padding:16px; background:#f9f9f9; border-radius:10px;">
+                        <div style="font-size:1.6rem; font-weight:800; color:var(--maroon);">{{ newsletter_total }}</div>
+                        <div style="font-size:0.72rem; color:#aaa; text-transform:uppercase; letter-spacing:0.5px; font-weight:600;">Total Active</div>
+                    </div>
+                    <div style="flex:1; text-align:center; padding:16px; background:#f9f9f9; border-radius:10px;">
+                        <div style="font-size:1.6rem; font-weight:800; color:#198754;">+{{ newsletter_this_month }}</div>
+                        <div style="font-size:0.72rem; color:#aaa; text-transform:uppercase; letter-spacing:0.5px; font-weight:600;">This Month</div>
+                    </div>
+                    <div style="flex:1; text-align:center; padding:16px; background:#f9f9f9; border-radius:10px;">
+                        <div style="font-size:1.6rem; font-weight:800; color:var(--orange);">+{{ newsletter_this_week }}</div>
+                        <div style="font-size:0.72rem; color:#aaa; text-transform:uppercase; letter-spacing:0.5px; font-weight:600;">This Week</div>
+                    </div>
+                </div>
+                <div style="background:linear-gradient(135deg,#5D1818,#8B2323); border-radius:10px; padding:16px; color:white;">
+                    <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.5); margin-bottom:6px;">
+                        Send a Newsletter
+                    </div>
+                    <code style="font-size:0.8rem; color:#E88D14;">
+                        python manage.py send_newsletter --subject "..." --body-file update.txt
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    {# ── Two-col: Recent Donations + Recent Volunteers ── #}
+    <div class="dash-two-col">
+
+        {# Recent Donations #}
+        <div class="dash-panel">
+            <div class="panel-head">
+                <h6>💛 Recent Donations</h6>
+                <a href="/admin/website/donation/">View All →</a>
+            </div>
+            <div class="panel-body">
+                {% for d in recent_donations %}
+                <div class="dash-row">
+                    <div>
+                        <div class="label">{{ d.donor_name|default:d.phone_number }}</div>
+                        <div class="meta">{{ d.created_at|date:"N j, Y · g:i A" }}</div>
+                    </div>
+                    <div class="amount">KES {{ d.amount|floatformat:0 }}</div>
+                </div>
+                {% empty %}
+                <div class="dash-row"><span class="meta">No donations yet.</span></div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {# Recent Volunteers #}
+        <div class="dash-panel">
+            <div class="panel-head">
+                <h6>🙋 Recent Volunteer Applications</h6>
+                <a href="/admin/website/volunteerapplication/">View All →</a>
+            </div>
+            <div class="panel-body">
+                {% for v in recent_volunteers %}
+                <div class="dash-row">
+                    <div>
+                        <div class="label">{{ v.full_name }}</div>
+                        <div class="meta">{{ v.program.title|default:"No program preference" }} · {{ v.created_at|date:"N j" }}</div>
+                    </div>
+                    <span class="pill pill-{{ v.status }}">{{ v.get_status_display }}</span>
+                </div>
+                {% empty %}
+                <div class="dash-row"><span class="meta">No applications yet.</span></div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {# ── Recent Inquiries ── #}
+    <div class="dash-panel">
+        <div class="panel-head">
+            <h6>💬 Recent Contact Inquiries</h6>
+            <a href="/admin/website/contactinquiry/">View All →</a>
+        </div>
+        <div class="panel-body">
+            {% for inq in recent_inquiries %}
+            <div class="dash-row">
+                <div>
+                    <div class="label">{{ inq.name }} &mdash; {{ inq.get_subject_display }}</div>
+                    <div class="meta">{{ inq.email }} · {{ inq.created_at|date:"N j, Y" }}</div>
+                </div>
+                <span class="pill pill-{{ inq.status }}">{{ inq.get_status_display }}</span>
+            </div>
+            {% empty %}
+            <div class="dash-row"><span class="meta">No inquiries yet.</span></div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

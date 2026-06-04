@@ -1,0 +1,31 @@
+New volunteer application received via paamoja.org
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+APPLICANT DETAILS
+━━━━━━━━━━━━━━━━━
+  Name         : {{ app.full_name }}
+  Email        : {{ app.email }}
+  Phone        : {{ app.phone }}
+  Location     : {{ app.location|default:"Not provided" }}
+  Age          : {{ app.age|default:"Not provided" }}
+
+VOLUNTEER PREFERENCES
+━━━━━━━━━━━━━━━━━━━━━
+  Program      : {{ app.program.title|default:"No preference" }}
+  Availability : {{ app.get_availability_display }}
+  Commitment   : {{ app.get_commitment_display }}
+  Prior NGO Exp: {% if app.has_experience %}Yes{% else %}No{% endif %}
+
+SKILLS & EXPERIENCE
+━━━━━━━━━━━━━━━━━━━
+{{ app.skills }}
+
+MOTIVATION
+━━━━━━━━━━
+{{ app.motivation }}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Reply to applicant : {{ app.email }}
+View in CMS        : https://paamoja.org/admin/website/volunteerapplication/{{ app.id }}/change/
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PaaMoja Initiative — Mathare Valley, Nairobi

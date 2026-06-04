@@ -1,0 +1,485 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}{{ program.title }} — PaaMoja Initiative{% endblock %}
+{% block meta_description %}{{ program.description|truncatewords:25 }}{% endblock %}
+{% block og_title %}{{ program.title }} | PaaMoja Initiative{% endblock %}
+{% block og_description %}{{ program.description|truncatewords:30 }}{% endblock %}
+{% if program.image %}{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{{ program.image.url }}{% endblock %}{% endif %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "EducationalOccupationalProgram",
+    "name": "{{ program.title }}",
+    "description": "{{ program.description|truncatewords:30 }}",
+    "provider": {
+        "@type": "NGO",
+        "name": "PaaMoja Initiative",
+        "url": "https://paamoja.org"
+    }
+}
+</script>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ── Hero ── */
+    .detail-hero {
+        min-height: 50vh;
+        display: flex;
+        align-items: flex-end;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #1a0808, #5D1818);
+    }
+    .detail-hero .hero-img {
+        position: absolute;
+        inset: 0;
+        width: 100%; height: 100%;
+        object-fit: cover;
+        opacity: 0.35;
+    }
+    .detail-hero .hero-content {
+        position: relative;
+        z-index: 1;
+        padding: 60px 0 50px;
+        width: 100%;
+    }
+    .breadcrumb-custom a {
+        color: rgba(255,255,255,0.6);
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+    .breadcrumb-custom a:hover { color: var(--accent-orange); }
+    .breadcrumb-custom span { color: rgba(255,255,255,0.4); margin: 0 8px; }
+
+    /* ── Stats band ── */
+    .stats-band {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+        margin-top: -40px;
+        position: relative;
+        z-index: 2;
+        padding: 32px;
+    }
+    .stat-col {
+        text-align: center;
+        padding: 12px 24px;
+        border-right: 1px solid #f0f0f0;
+    }
+    .stat-col:last-child { border-right: none; }
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--primary-maroon);
+        font-family: 'Playfair Display', serif;
+        display: block;
+    }
+    .stat-label {
+        font-size: 0.8rem;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+    }
+
+    /* ── Body layout ── */
+    .program-body {
+        font-size: 1.05rem;
+        line-height: 1.85;
+        color: #444;
+    }
+    .program-body p { margin-bottom: 1.2rem; }
+
+    /* ── Gallery ── */
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+    .gallery-grid .gallery-item {
+        border-radius: 10px;
+        overflow: hidden;
+        aspect-ratio: 4/3;
+        cursor: pointer;
+        position: relative;
+    }
+    .gallery-grid .gallery-item img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s, filter 0.4s;
+    }
+    .gallery-grid .gallery-item:hover img {
+        transform: scale(1.06);
+        filter: brightness(0.85);
+    }
+    .gallery-grid .gallery-item .overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s;
+        background: rgba(93,24,24,0.5);
+        color: white;
+        font-size: 1.5rem;
+    }
+    .gallery-grid .gallery-item:hover .overlay { opacity: 1; }
+    @media (max-width: 576px) {
+        .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ── Sidebar ── */
+    .sidebar-card {
+        background: white;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        margin-bottom: 24px;
+    }
+    .sidebar-card .card-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #999;
+        margin-bottom: 16px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--accent-orange);
+        display: inline-block;
+    }
+
+    /* ── Related programs ── */
+    .related-card {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #f5f5f5;
+        text-decoration: none;
+        transition: transform 0.2s;
+    }
+    .related-card:last-child { border-bottom: none; }
+    .related-card:hover { transform: translateX(4px); }
+    .related-card .thumb {
+        width: 56px; height: 56px;
+        border-radius: 10px;
+        overflow: hidden;
+        flex-shrink: 0;
+        background: linear-gradient(135deg, var(--primary-maroon), #8B2323);
+        display: flex; align-items: center; justify-content: center;
+    }
+    .related-card .thumb img {
+        width: 100%; height: 100%; object-fit: cover;
+    }
+    .related-card .title {
+        font-weight: 700;
+        color: #333;
+        font-size: 0.9rem;
+        line-height: 1.3;
+    }
+    .related-card .sub {
+        font-size: 0.75rem;
+        color: #aaa;
+        margin-top: 2px;
+    }
+
+    /* ── Lightbox ── */
+    #lightbox {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.92);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    #lightbox.active { display: flex; }
+    #lightbox img {
+        max-width: 90vw;
+        max-height: 80vh;
+        border-radius: 8px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    }
+    #lightbox .lb-caption {
+        color: rgba(255,255,255,0.7);
+        margin-top: 16px;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+    #lightbox .lb-close {
+        position: absolute;
+        top: 20px; right: 24px;
+        color: white; font-size: 2rem;
+        cursor: pointer; line-height: 1;
+        opacity: 0.7; transition: opacity 0.2s;
+    }
+    #lightbox .lb-close:hover { opacity: 1; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ── HERO ── #}
+<section class="detail-hero">
+    {% if program.image %}
+    <img class="hero-img" src="{{ program.image.url }}" alt="{{ program.title }}">
+    {% endif %}
+    <div class="hero-content">
+        <div class="container text-white">
+            <div class="breadcrumb-custom mb-3">
+                <a href="{% url 'website:home' %}">Home</a>
+                <span>›</span>
+                <a href="{% url 'website:program_list' %}">Programs</a>
+                <span>›</span>
+                <span style="color:rgba(255,255,255,0.8);">{{ program.title }}</span>
+            </div>
+            <div class="d-flex align-items-center gap-3 mb-3">
+                {% if program.icon %}
+                <div style="width:52px;height:52px;background:rgba(232,141,20,0.2);border:2px solid var(--accent-orange);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                    <i class="{{ program.icon }}" style="color:var(--accent-orange); font-size:1.3rem;"></i>
+                </div>
+                {% endif %}
+                <span class="badge rounded-pill px-3 py-2"
+                      style="background:rgba(232,141,20,0.2);color:var(--accent-orange);font-size:0.75rem;font-weight:700;letter-spacing:1px;border:1px solid rgba(232,141,20,0.4);">
+                    Active Program
+                </span>
+            </div>
+            <h1 class="display-4 fw-bold mb-3" style="font-family:'Playfair Display',serif;">
+                {{ program.title }}
+            </h1>
+            <p class="lead opacity-75" style="max-width:620px;">{{ program.description }}</p>
+        </div>
+    </div>
+</section>
+
+<div class="container" style="max-width:1100px;">
+
+    {# ── STATS BAND ── #}
+    {% if program.stat_1_number or program.stat_2_number or program.stat_3_number %}
+    <div class="stats-band mb-5">
+        <div class="row g-0 text-center">
+            {% if program.stat_1_number %}
+            <div class="col stat-col">
+                <span class="stat-number">{{ program.stat_1_number }}</span>
+                <span class="stat-label">{{ program.stat_1_label }}</span>
+            </div>
+            {% endif %}
+            {% if program.stat_2_number %}
+            <div class="col stat-col">
+                <span class="stat-number">{{ program.stat_2_number }}</span>
+                <span class="stat-label">{{ program.stat_2_label }}</span>
+            </div>
+            {% endif %}
+            {% if program.stat_3_number %}
+            <div class="col stat-col">
+                <span class="stat-number">{{ program.stat_3_number }}</span>
+                <span class="stat-label">{{ program.stat_3_label }}</span>
+            </div>
+            {% endif %}
+            <div class="col stat-col">
+                <span class="stat-number">15+</span>
+                <span class="stat-label">Years Running</span>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="mb-4"></div>
+    {% endif %}
+
+    {# ── MAIN CONTENT + SIDEBAR ── #}
+    <div class="row g-5 mb-5">
+
+        {# Body #}
+        <div class="col-lg-8">
+
+            {# Full description #}
+            <div class="program-body mb-5">
+                {% if program.full_body %}
+                    {% for para in program.full_body|splitlines %}
+                        {% if para %}<p>{{ para }}</p>{% endif %}
+                    {% endfor %}
+                {% else %}
+                    <p>{{ program.description }}</p>
+                    <p class="text-muted fst-italic">
+                        Full program details coming soon. Check back or
+                        <a href="{% url 'website:contact' %}" style="color:var(--primary-maroon);">contact us</a>
+                        to learn more.
+                    </p>
+                {% endif %}
+            </div>
+
+            {# Gallery #}
+            {% if gallery %}
+            <div class="mb-5">
+                <h4 class="section-title">Program Gallery</h4>
+                <div class="gallery-grid">
+                    {% for img in gallery %}
+                    <div class="gallery-item" onclick="openLightbox('{{ img.image.url }}', '{{ img.caption|escapejs }}')">
+                        <img src="{{ img.image.url }}" alt="{{ img.caption|default:program.title }}">
+                        <div class="overlay"><i class="fas fa-expand"></i></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {# Testimonials #}
+            {% if stories %}
+            <div class="mb-5">
+                <h4 class="section-title">Voices From This Program</h4>
+                {% for story in stories %}
+                <div class="p-4 mb-3 rounded-3 bg-white shadow-sm"
+                     style="border-left:4px solid var(--accent-orange);">
+                    <p class="fst-italic text-dark mb-2" style="font-family:'Playfair Display',serif;">
+                        "{{ story.quote }}"
+                    </p>
+                    <div class="d-flex align-items-center gap-2 mt-3">
+                        {% if story.photo %}
+                        <img src="{{ story.photo.url }}" class="rounded-circle"
+                             style="width:36px;height:36px;object-fit:cover;border:2px solid var(--accent-orange);"
+                             alt="{{ story.name }}">
+                        {% endif %}
+                        <div>
+                            <div class="fw-bold text-dark" style="font-size:0.9rem;">{{ story.name }}</div>
+                            <div class="text-muted" style="font-size:0.8rem;">{{ story.role }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        </div>
+
+        {# Sidebar #}
+        <div class="col-lg-4">
+
+            {# Donate to this program #}
+            <div class="sidebar-card" style="background:linear-gradient(135deg,#5D1818,#8B2323); color:white;">
+                <div class="card-label" style="color:var(--accent-orange); border-color:var(--accent-orange);">
+                    Support This Program
+                </div>
+                <p class="small opacity-75 mb-4">
+                    Your donation goes directly to funding {{ program.title }} activities for Mathare's youth.
+                </p>
+                <button class="btn btn-warning w-100 fw-bold rounded-pill"
+                        data-bs-toggle="modal" data-bs-target="#donationModal">
+                    <i class="fas fa-heart me-2"></i>Donate via M-Pesa
+                </button>
+            </div>
+
+            {# Volunteer for this program #}
+            {% if volunteers_open %}
+            <div class="sidebar-card">
+                <div class="card-label">Volunteer</div>
+                <p class="text-muted small mb-3">
+                    We're actively looking for volunteers to support {{ program.title }}.
+                    Share your skills with Mathare's youth.
+                </p>
+                <a href="{% url 'website:volunteer' %}?program={{ program.pk }}"
+                   class="btn w-100 fw-bold rounded-pill"
+                   style="background:var(--primary-maroon);color:white;">
+                    <i class="fas fa-hand-holding-heart me-2"></i>Apply to Volunteer
+                </a>
+            </div>
+            {% endif %}
+
+            {# Related programs #}
+            {% if other_programs %}
+            <div class="sidebar-card">
+                <div class="card-label">Other Programs</div>
+                {% for other in other_programs %}
+                <a href="{{ other.get_absolute_url }}" class="related-card">
+                    <div class="thumb">
+                        {% if other.image %}
+                        <img src="{{ other.image.url }}" alt="{{ other.title }}">
+                        {% else %}
+                        <i class="{{ other.icon|default:'fas fa-hands-helping' }}"
+                           style="color:var(--accent-orange); font-size:1rem;"></i>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <div class="title">{{ other.title }}</div>
+                        <div class="sub">PaaMoja Program</div>
+                    </div>
+                </a>
+                {% endfor %}
+                <a href="{% url 'website:program_list' %}" class="btn btn-sm btn-outline-secondary rounded-pill w-100 mt-3">
+                    View All Programs
+                </a>
+            </div>
+            {% endif %}
+
+            {# Impact Reports #}
+            <div class="sidebar-card">
+                <div class="card-label">Impact Reports</div>
+                <p class="text-muted small mb-3">
+                    Read our annual reports to see exactly how your support is used.
+                </p>
+                <a href="{% url 'website:impact_reports' %}"
+                   class="btn btn-sm btn-outline-secondary rounded-pill w-100">
+                    <i class="fas fa-file-pdf me-2"></i>Browse Reports
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{# ── LIGHTBOX ── #}
+<div id="lightbox" onclick="closeLightbox()">
+    <span class="lb-close" onclick="closeLightbox()">×</span>
+    <img id="lbImg" src="" alt="">
+    <div id="lbCaption" class="lb-caption"></div>
+</div>
+
+{# ── BOTTOM CTA ── #}
+<section class="py-5 text-white text-center"
+         style="background: linear-gradient(135deg, #1a0808, var(--primary-maroon));">
+    <div class="container">
+        <h2 class="fw-bold mb-3" style="font-family:'Playfair Display',serif;">
+            Ready to Make an Impact?
+        </h2>
+        <p class="lead mb-4 opacity-75">
+            Every contribution — whether money, time, or skills — changes a life in Mathare.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <button class="btn btn-warning btn-lg fw-bold rounded-pill px-4"
+                    data-bs-toggle="modal" data-bs-target="#donationModal">
+                <i class="fas fa-heart me-2"></i>Donate Now
+            </button>
+            <a href="{% url 'website:volunteer' %}" class="btn btn-outline-light btn-lg fw-bold rounded-pill px-4">
+                <i class="fas fa-hand-holding-heart me-2"></i>Volunteer
+            </a>
+            <a href="{% url 'website:program_list' %}" class="btn btn-outline-light btn-lg fw-bold rounded-pill px-4">
+                <i class="fas fa-th-large me-2"></i>All Programs
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function openLightbox(src, caption) {
+        document.getElementById('lbImg').src = src;
+        document.getElementById('lbCaption').textContent = caption;
+        document.getElementById('lightbox').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeLightbox();
+    });
+</script>
+{% endblock %}

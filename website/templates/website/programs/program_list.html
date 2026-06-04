@@ -1,0 +1,207 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}Our Programs — PaaMoja Initiative | Mathare Valley{% endblock %}
+{% block meta_description %}Explore PaaMoja Initiative's youth empowerment programs in Mathare Valley — from life skills and leadership to sports and creative arts.{% endblock %}
+
+{% block extra_head %}
+<style>
+    .programs-hero {
+        background: linear-gradient(160deg, #1a0808 0%, #5D1818 55%, #8B2323 100%);
+        min-height: 38vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .programs-hero::after {
+        content: '';
+        position: absolute;
+        bottom: -1px; left: 0; right: 0;
+        height: 60px;
+        background: var(--light-bg);
+        clip-path: ellipse(55% 100% at 50% 100%);
+    }
+
+    .program-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        transition: transform 0.3s, box-shadow 0.3s;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .program-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 50px rgba(93,24,24,0.13);
+    }
+    .program-card .img-wrap {
+        height: 220px;
+        overflow: hidden;
+        position: relative;
+    }
+    .program-card .img-wrap img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    .program-card:hover .img-wrap img { transform: scale(1.06); }
+    .program-card .img-placeholder {
+        height: 220px;
+        background: linear-gradient(135deg, var(--primary-maroon), #8B2323);
+        display: flex; align-items: center; justify-content: center;
+        flex-direction: column; gap: 8px;
+        color: white;
+    }
+    .program-card .card-body {
+        padding: 24px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .program-card .card-footer-custom {
+        padding: 0 24px 24px;
+    }
+    .tag-badge {
+        display: inline-block;
+        background: rgba(93,24,24,0.08);
+        color: var(--primary-maroon);
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        margin-bottom: 10px;
+    }
+    .btn-detail {
+        display: inline-block;
+        background: var(--primary-maroon);
+        color: white;
+        padding: 10px 24px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition: all 0.3s;
+        width: 100%;
+        text-align: center;
+    }
+    .btn-detail:hover {
+        background: var(--accent-orange);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(232,141,20,0.3);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ── HERO ── #}
+<section class="programs-hero text-white text-center py-5">
+    <div class="container" style="position:relative;z-index:1;">
+        <p class="text-warning small fw-bold text-uppercase mb-2" style="letter-spacing:3px;">
+            What We Do
+        </p>
+        <h1 class="display-3 fw-bold" style="font-family:'Playfair Display',serif;">
+            Our Programs
+        </h1>
+        <p class="lead opacity-75 mt-2" style="max-width:540px; margin:0 auto;">
+            Six evidence-based programs designed to equip Mathare's youth with the skills, confidence, and networks to lead.
+        </p>
+    </div>
+</section>
+
+{# ── PROGRAMS GRID ── #}
+<section class="py-5" style="background:var(--light-bg);">
+    <div class="container">
+
+        {% if programs %}
+        <div class="row g-4">
+            {% for program in programs %}
+            <div class="col-md-6 col-lg-4">
+                <div class="program-card">
+                    <div class="img-wrap">
+                        {% if program.image %}
+                        <img src="{{ program.image.url }}" alt="{{ program.title }}">
+                        {% else %}
+                        <div class="img-placeholder">
+                            <i class="{{ program.icon|default:'fas fa-hands-helping' }} fa-2x"
+                               style="color:var(--accent-orange);"></i>
+                            <span class="fw-bold small">PaaMoja Program</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <span class="tag-badge">Program</span>
+                        <h5 class="fw-bold mb-2" style="color:var(--primary-maroon); font-family:'Playfair Display',serif;">
+                            {{ program.title }}
+                        </h5>
+                        <p class="text-secondary small mb-3" style="flex:1;">
+                            {{ program.description|truncatewords:28 }}
+                        </p>
+
+                        {# Mini stats if available #}
+                        {% if program.stat_1_number %}
+                        <div class="d-flex gap-3 mb-3">
+                            {% if program.stat_1_number %}
+                            <div class="text-center">
+                                <div class="fw-bold" style="color:var(--primary-maroon); font-size:1.1rem;">{{ program.stat_1_number }}</div>
+                                <div class="text-muted" style="font-size:0.7rem;">{{ program.stat_1_label }}</div>
+                            </div>
+                            {% endif %}
+                            {% if program.stat_2_number %}
+                            <div class="text-center">
+                                <div class="fw-bold" style="color:var(--primary-maroon); font-size:1.1rem;">{{ program.stat_2_number }}</div>
+                                <div class="text-muted" style="font-size:0.7rem;">{{ program.stat_2_label }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer-custom">
+                        <a href="{{ program.get_absolute_url }}" class="btn-detail">
+                            Learn More <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+        <div class="text-center py-5 text-muted">
+            <i class="fas fa-hands-helping fa-3x mb-3 d-block opacity-25"></i>
+            <p>No programs added yet. Add them in the
+                <a href="/admin/website/program/" style="color:var(--primary-maroon);">CMS</a>.
+            </p>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+
+{# ── VOLUNTEER CTA ── #}
+<section class="py-5 text-white text-center"
+         style="background: linear-gradient(135deg, #1a0808, var(--primary-maroon));">
+    <div class="container">
+        <h2 class="fw-bold mb-3" style="font-family:'Playfair Display',serif;">
+            Want to Support a Program?
+        </h2>
+        <p class="lead mb-4 opacity-75">Volunteer your skills or make a donation — every contribution counts.</p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{% url 'website:volunteer' %}" class="btn btn-warning btn-lg fw-bold rounded-pill px-4">
+                <i class="fas fa-hand-holding-heart me-2"></i>Volunteer With Us
+            </a>
+            <button class="btn btn-outline-light btn-lg fw-bold rounded-pill px-4"
+                    data-bs-toggle="modal" data-bs-target="#donationModal">
+                <i class="fas fa-heart me-2"></i>Donate Now
+            </button>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

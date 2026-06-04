@@ -1,0 +1,303 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}Impact Reports — PaaMoja Initiative | Transparency & Accountability{% endblock %}
+{% block meta_description %}Download PaaMoja Initiative's annual reports, program reports, and financial statements. 15+ years of documented community impact in Mathare Valley.{% endblock %}
+
+{% block extra_head %}
+<style>
+    .reports-hero {
+        background: linear-gradient(160deg, #1a0808 0%, #5D1818 55%, #8B2323 100%);
+        min-height: 36vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .reports-hero::after {
+        content: '';
+        position: absolute;
+        bottom: -1px; left: 0; right: 0;
+        height: 60px;
+        background: var(--light-bg);
+        clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    /* Filter bar */
+    .filter-bar {
+        background: white;
+        border-radius: 14px;
+        padding: 20px 28px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        margin-bottom: 36px;
+    }
+    .filter-btn {
+        border: 2px solid #eee;
+        border-radius: 30px;
+        padding: 6px 18px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        background: white;
+        color: #555;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+        background: var(--primary-maroon);
+        color: white;
+        border-color: var(--primary-maroon);
+    }
+    .filter-select {
+        border: 2px solid #eee;
+        border-radius: 30px;
+        padding: 6px 18px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #555;
+        background: white;
+        cursor: pointer;
+    }
+    .filter-select:focus {
+        border-color: var(--primary-maroon);
+        outline: none;
+        box-shadow: none;
+    }
+    /* Report card */
+    .report-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        transition: transform 0.3s, box-shadow 0.3s;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .report-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 40px rgba(93,24,24,0.1);
+    }
+    .report-card .cover {
+        height: 200px;
+        background: linear-gradient(135deg, var(--primary-maroon), #3d1010);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .report-card .cover img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+    }
+    .report-card .cover .year-badge {
+        position: absolute;
+        top: 16px; left: 16px;
+        background: var(--accent-orange);
+        color: white;
+        font-size: 1.2rem;
+        font-weight: 800;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-family: 'Playfair Display', serif;
+    }
+    .report-card .cover .pdf-icon {
+        font-size: 3.5rem;
+        color: rgba(255,255,255,0.25);
+    }
+    .report-card .cover img ~ .pdf-icon { display: none; }
+    .report-card .body {
+        padding: 22px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .type-badge {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        background: rgba(93,24,24,0.08);
+        color: var(--primary-maroon);
+        margin-bottom: 10px;
+    }
+    .report-card .meta {
+        display: flex;
+        gap: 16px;
+        font-size: 0.78rem;
+        color: #aaa;
+        margin-top: auto;
+        padding-top: 14px;
+        border-top: 1px solid #f5f5f5;
+        margin-top: 14px;
+    }
+    .report-card .meta i { margin-right: 4px; }
+    .btn-download {
+        display: block;
+        background: var(--primary-maroon);
+        color: white;
+        text-align: center;
+        padding: 12px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition: background 0.3s;
+        border-top: 1px solid rgba(0,0,0,0.05);
+    }
+    .btn-download:hover {
+        background: var(--accent-orange);
+        color: white;
+    }
+    /* Trust banner */
+    .trust-banner {
+        background: white;
+        border-radius: 14px;
+        padding: 28px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        border-left: 5px solid var(--accent-orange);
+    }
+    .trust-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        margin-bottom: 20px;
+    }
+    .trust-item:last-child { margin-bottom: 0; }
+    .trust-icon {
+        width: 40px; height: 40px;
+        background: rgba(93,24,24,0.08);
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        color: var(--primary-maroon);
+        flex-shrink: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="reports-hero text-white text-center py-5">
+    <div class="container" style="position:relative;z-index:1;">
+        <p class="text-warning small fw-bold text-uppercase mb-2" style="letter-spacing:3px;">
+            Transparency & Accountability
+        </p>
+        <h1 class="display-3 fw-bold" style="font-family:'Playfair Display',serif;">
+            Impact Reports
+        </h1>
+        <p class="lead opacity-75 mt-2" style="max-width:540px; margin:0 auto;">
+            We believe donors deserve to see exactly where their money goes.
+            Download our reports, read the data, and hold us accountable.
+        </p>
+    </div>
+</section>
+
+<section class="py-5" style="background:var(--light-bg);">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-9">
+                <div class="filter-bar">
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        <span class="text-muted small fw-bold me-2">Filter by type:</span>
+                        <a href="{% url 'website:impact_reports' %}{% if active_year %}?year={{ active_year }}{% endif %}"
+                           class="filter-btn {% if not active_type %}active{% endif %}">All</a>
+                        {% for value, label in report_types %}
+                        <a href="?type={{ value }}{% if active_year %}&year={{ active_year }}{% endif %}"
+                           class="filter-btn {% if active_type == value %}active{% endif %}">{{ label }}</a>
+                        {% endfor %}
+                        {% if years %}
+                        <div class="ms-auto">
+                            <select class="filter-select" onchange="window.location='?{% if active_type %}type={{ active_type }}&{% endif %}year='+this.value">
+                                <option value="">All Years</option>
+                                {% for y in years %}
+                                <option value="{{ y }}" {% if active_year == y|stringformat:"s" %}selected{% endif %}>{{ y }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if reports %}
+                <div class="row g-4">
+                    {% for report in reports %}
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="report-card">
+                            <div class="cover">
+                                {% if report.cover_image %}
+                                <img src="{{ report.cover_image.url }}" alt="{{ report.title }}">
+                                {% endif %}
+                                <div class="year-badge">{{ report.year }}</div>
+                                <i class="fas fa-file-pdf pdf-icon"></i>
+                            </div>
+                            <div class="body">
+                                <span class="type-badge">{{ report.get_report_type_display }}</span>
+                                <h6 class="fw-bold text-dark mb-2" style="font-family:'Playfair Display',serif; font-size:1rem;">
+                                    {{ report.title }}
+                                </h6>
+                                {% if report.description %}
+                                <p class="text-muted small mb-0">{{ report.description|truncatewords:18 }}</p>
+                                {% endif %}
+                                <div class="meta">
+                                    {% if report.pages %}<span><i class="fas fa-file-alt"></i>{{ report.pages }} pages</span>{% endif %}
+                                    <span><i class="fas fa-weight"></i>{{ report.file_size_display }}</span>
+                                    <span><i class="fas fa-download"></i>{{ report.downloads }}</span>
+                                </div>
+                            </div>
+                            <a href="{% url 'website:download_report' report.pk %}" class="btn-download">
+                                <i class="fas fa-download me-2"></i>Download PDF
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-5 text-muted">
+                    <i class="fas fa-folder-open fa-3x mb-3 d-block opacity-25"></i>
+                    <p class="fw-bold">No reports found for this filter.</p>
+                    <a href="{% url 'website:impact_reports' %}" class="btn btn-sm btn-outline-secondary rounded-pill mt-2">Clear Filters</a>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-lg-3">
+                <div class="trust-banner mb-4">
+                    <h6 class="fw-bold mb-4" style="color:var(--primary-maroon); font-family:'Playfair Display',serif;">Why We Publish Reports</h6>
+                    <div class="trust-item">
+                        <div class="trust-icon"><i class="fas fa-eye"></i></div>
+                        <div>
+                            <div class="fw-bold text-dark small">Full Transparency</div>
+                            <div class="text-muted" style="font-size:0.8rem;">Every donor deserves to see where their money goes.</div>
+                        </div>
+                    </div>
+                    <div class="trust-item">
+                        <div class="trust-icon"><i class="fas fa-chart-line"></i></div>
+                        <div>
+                            <div class="fw-bold text-dark small">Measured Impact</div>
+                            <div class="text-muted" style="font-size:0.8rem;">We track, measure, and publish our community outcomes.</div>
+                        </div>
+                    </div>
+                    <div class="trust-item">
+                        <div class="trust-icon"><i class="fas fa-handshake"></i></div>
+                        <div>
+                            <div class="fw-bold text-dark small">Donor Trust</div>
+                            <div class="text-muted" style="font-size:0.8rem;">Accountability is how we build long-term partnerships.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-card p-4 rounded-3 bg-white shadow-sm">
+                    <h6 class="fw-bold mb-3" style="color:var(--primary-maroon);">Need a specific report?</h6>
+                    <p class="text-muted small mb-3">If you need a custom report or financial statement for grant applications, contact us directly.</p>
+                    <a href="{% url 'website:contact' %}" class="btn btn-sm rounded-pill fw-bold w-100" style="background:var(--primary-maroon);color:white;">
+                        <i class="fas fa-envelope me-2"></i>Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
