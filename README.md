@@ -15,8 +15,6 @@ A modern, full-stack web application built to empower the youth of Mathare Valle
 * **Frontend:** HTML5, CSS3, JavaScript, Bootstrap 5
 * **Architecture:** MVT (Model-View-Template)
 
-## 📸 Project Showcase
-*(Note: I recommend dropping a screenshot of your beautiful Hero section right here once it's on GitHub!)*
 
 ## 👨‍💻 Developer
 Built by **Nelson** as a demonstration of full-stack web development, database management, and premium UI design.
